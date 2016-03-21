@@ -1,0 +1,15 @@
+{
+    "name": "mia3/expose",
+    "description": "Fluid Helpers to easily handle common tasks like forms and tables",
+    "authors": [
+        {
+            "name": "Marc Neuhaus",
+            "email": "marc@mia3.com"
+        }
+    ]
+    "autoload": {
+        "psr-4": {
+            "Mia3\\Expose\\": "src/"
+        }
+    }
+}
