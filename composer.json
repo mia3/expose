@@ -6,7 +6,7 @@
             "name": "Marc Neuhaus",
             "email": "marc@mia3.com"
         }
-    ]
+    ],
     "autoload": {
         "psr-4": {
             "Mia3\\Expose\\": "src/"
