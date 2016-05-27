@@ -25,6 +25,11 @@ class FieldViewHelper extends AbstractViewHelper {
     protected $escapeOutput = FALSE;
 
     /**
+     * @var array
+     */
+    protected $additionalArguments = [];
+
+    /**
      * Constructor
      *
      * @api
@@ -44,6 +49,7 @@ class FieldViewHelper extends AbstractViewHelper {
         $arguments = $this->arguments;
         $content = $this->renderChildren();
         if (empty($content)) {
+            $arguments = array_merge($arguments,$this->additionalArguments);
             $content = $this->viewHelperVariableContainer->getView()->renderPartial('Expose/Fields/' . ucfirst($this->arguments['control']), NULL, $this->arguments);
         }
         $arguments['control'] = $content;
@@ -51,7 +57,26 @@ class FieldViewHelper extends AbstractViewHelper {
         if (empty($this->arguments['wrap'])) {
             return $content;
         }
+
         return $this->viewHelperVariableContainer->getView()->renderPartial('Expose/Wraps/Default', NULL, $arguments);
     }
 
+    /**
+     * Merges the additional arguments with the registered arguments
+     * @param array $arguments
+     */
+    public function handleAdditionalArguments(array $arguments)
+    {
+        $this->arguments = array_merge($this->arguments,$arguments);
+    }
+
+    /**
+     * Just accept anything as additional arguments
+     * @param array $arguments
+     * @return bool
+     */
+    public function validateAdditionalArguments(array $arguments)
+    {
+        return TRUE;
+    }
 }
