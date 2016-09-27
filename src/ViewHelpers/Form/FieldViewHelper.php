@@ -1,6 +1,10 @@
 <?php
 namespace Mia3\Expose\ViewHelpers\Form;
 
+use Mia3\Expose\Form\FormField;
+use Mia3\Expose\Reflection\ClassSchema;
+use Mia3\Expose\Reflection\PropertySchema;
+use Mia3\Expose\ViewHelpers\FormViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /*
@@ -31,34 +35,45 @@ class FieldViewHelper extends AbstractViewHelper {
 
     /**
      * Constructor
-     *
-     * @api
      */
     public function initializeArguments() {
-        $this->registerArgument('name', 'string', 'Name of the form field', TRUE);
-        $this->registerArgument('label', 'string', 'Label for the form field');
-        $this->registerArgument('wrap', 'string', 'Default Wrap', FALSE, 'Default');
-        $this->registerArgument('control', 'string', 'Default Control', FALSE, 'Textfield');
+        $this->registerArgument('field', FormField::class, 'FormField to render', FALSE);
+        $this->registerArgument('name', 'string', 'Name of the form field', FALSE);
         $this->registerArgument('value', 'string', 'Default value', FALSE);
+        $this->registerArgument('control', 'string', 'Specifies the control to use to render this field', FALSE, NULL);
+        $this->registerArgument('wrap', 'string', 'Specifies the wrap used to render the field', FALSE, 'Default');
+        $this->registerArgument('required', 'boolean', 'Specifies, if this form field is required', FALSE, FALSE);
+        $this->registerArgument('arguments', 'array', 'additional arguments for the control', FALSE, array());
+        $this->registerArgument('data-error', 'string', 'custom data attribute for error messages', FALSE, NULL);
+        $this->registerArgument('label', 'string', 'custom label for the field', FALSE, NULL);
     }
 
     /**
      * @return string
      */
     public function render() {
-        $arguments = $this->arguments;
-        $content = $this->renderChildren();
-        if (empty($content)) {
-            $arguments = array_merge($arguments,$this->additionalArguments);
-            $content = $this->viewHelperVariableContainer->getView()->renderPartial('Expose/Fields/' . ucfirst($this->arguments['control']), NULL, $this->arguments);
+        /** @var FormField $formField */
+        $formField = $this->arguments['field'];
+        if (!$formField instanceof FormField) {
+            $formField = new FormField($this->arguments['name'], $this->arguments);
         }
-        $arguments['control'] = $content;
 
-        if (empty($this->arguments['wrap'])) {
+        $this->arguments['control'] = $this->renderControl($formField->getControl());
+
+        if (empty($formField->getWrap())) {
+            return $this->arguments['control'];
+        }
+
+        return $this->viewHelperVariableContainer->getView()->renderPartial('Expose/Wraps/Default', NULL, $this->arguments);
+    }
+
+    public function renderControl($control) {
+        $content = $this->renderChildren();
+        if (!empty($content)) {
             return $content;
         }
-
-        return $this->viewHelperVariableContainer->getView()->renderPartial('Expose/Wraps/Default', NULL, $arguments);
+        $arguments = array_merge($this->arguments, $this->additionalArguments);
+        return $this->viewHelperVariableContainer->getView()->renderPartial('Expose/Fields/' . ucfirst($control), NULL, $arguments);
     }
 
     /**
