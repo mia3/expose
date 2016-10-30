@@ -15,6 +15,7 @@ use Mia3\Expose\Form\FormRequestInterface;
 use Mia3\Expose\Reflection\ClassSchemaFactory;
 use Mia3\Expose\Reflection\Sources\AnnotationSource;
 use Mia3\Expose\Reflection\Sources\DefaultSource;
+use Mia3\Expose\Reflection\Sources\DoctrineAnnotationSource;
 use Mia3\Expose\Reflection\Sources\PhpSource;
 
 /**
@@ -32,6 +33,7 @@ class Expose {
             self::$classSchemaFactory->addSource(DefaultSource::class);
             self::$classSchemaFactory->addSource(PhpSource::class);
             self::$classSchemaFactory->addSource(AnnotationSource::class);
+            self::$classSchemaFactory->addSource(DoctrineAnnotationSource::class);
         }
         return self::$classSchemaFactory;
     }

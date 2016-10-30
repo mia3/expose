@@ -2,6 +2,7 @@
 namespace Mia3\Expose\Action\Form;
 
 use Mia3\Expose\Utility\StringFormatter;
+use Mia3\Expose\Validator\FormFieldValidatorInterface;
 
 class FormField {
 
@@ -49,6 +50,11 @@ class FormField {
      * @var boolean
      */
     protected $required;
+
+    /**
+     * @var FormFieldValidatorInterface
+     */
+    protected $validator;
 
     public function __construct($name, $options = NULL) {
         $this->name = $name;
@@ -220,6 +226,26 @@ class FormField {
     {
         $this->description = $description;
         return $this;
+    }
+
+    /**
+     * @return FormFieldValidatorInterface
+     */
+    public function getValidator()
+    {
+        return $this->validator;
+    }
+
+    /**
+     * @param FormFieldValidatorInterface $validator
+     */
+    public function setValidator($validator)
+    {
+        $this->validator = $validator;
+    }
+
+    public function validate() {
+        $this->validator->validate($this->getValue());
     }
 
 }

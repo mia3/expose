@@ -10,8 +10,10 @@ namespace Mia3\Expose\ViewHelpers;
  *                                                                        *
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
+use Mia3\Expose\Action\Form\FormField;
 use Mia3\Expose\Core\Expose;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
+use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
 
 
 /**
@@ -35,14 +37,20 @@ class FormViewHelper extends AbstractTagBasedViewHelper {
 
     public function render() {
         $this->tag->addAttribute('action', $this->arguments['action']);
-//        $this->viewHelperVariableContainer->addOrUpdate(self::class, 'object', $this->arguments['object']);
-//        $this->viewHelperVariableContainer->addOrUpdate(self::class, 'objectName', $this->arguments['objectName']);
-//        $this->templateVariableContainer->add('schema', Expose::classSchemaFactory()->createClassSchema($this->arguments['object']));
-        $this->tag->setContent($this->renderChildren());
-//        $this->templateVariableContainer->remove('schema');
+        $hiddenFields = array();
+        /** @var FormField $hiddenField */
+        foreach ($this->arguments['form']->getHiddenFields() as $hiddenField) {
+            $tag = new TagBuilder('input');
+            $tag->addAttributes([
+                'type' => 'hidden',
+                'name' => $hiddenField->getName(),
+                'value' => $hiddenField->getValueOrDefault()
+            ]);
+            $hiddenFields[] = $tag->render();
+        }
+        $content = implode(chr(10), $hiddenFields) . chr(10) . $this->renderChildren();
+        $this->tag->setContent($content);
         $output = $this->tag->render();
-//        $this->viewHelperVariableContainer->remove(self::class, 'object');
-//        $this->viewHelperVariableContainer->remove(self::class, 'objectName');
         return $output;
     }
 

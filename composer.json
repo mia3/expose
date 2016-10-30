@@ -9,7 +9,7 @@
     ],
     "require": {
         "symfony/property-access": "*",
-        "symfony/property-access": "*"
+        "league/container": "*"
     },
     "autoload": {
         "psr-4": {

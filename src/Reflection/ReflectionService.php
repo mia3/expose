@@ -45,6 +45,16 @@ class ReflectionService {
         return $this->annotationReader->getPropertyAnnotations($reflectionProperty);
     }
 
+    public function getPropertyAnnotationClassNames($className, $propertyName = NULL) {
+        $reflectionProperty = new \ReflectionProperty($className, $propertyName);
+        $annotations = $this->annotationReader->getPropertyAnnotations($reflectionProperty);
+        $classNames = array();
+        foreach ($annotations as $annotation) {
+            $classNames[] = get_class(($annotation));
+        }
+        return array_unique($classNames);
+    }
+
     public function getPropertyTags($className, $propertyName) {
         $reflectionProperty = new \ReflectionProperty($className, $propertyName);
         return $this->parseDocComment($reflectionProperty->getDocComment());

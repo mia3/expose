@@ -14,6 +14,13 @@ class ExposeForm {
     protected $fields = array();
 
     /**
+     * The hidden fields of this form.
+     *
+     * @var array An array of FormFields
+     */
+    protected $hiddenFields = array();
+
+    /**
      * The errors of this form.
      *
      * @var array An array of FormError instances
@@ -41,6 +48,17 @@ class ExposeForm {
         return $formField;
     }
 
+    public function createHiddenField($name) {
+        $formField = new FormField($name);
+        $this->hiddenFields[$name] = $formField;
+
+        if ($this->isSubmitted()) {
+            $formField->setValue($this->formRequest->getFormData($formField->getName()));
+        }
+
+        return $formField;
+    }
+
     /**
      * @return array
      */
@@ -55,6 +73,22 @@ class ExposeForm {
     public function setFields($fields)
     {
         $this->fields = $fields;
+    }
+
+    /**
+     * @return array
+     */
+    public function getHiddenFields()
+    {
+        return $this->hiddenFields;
+    }
+
+    /**
+     * @param array $hiddenFields
+     */
+    public function setHiddenFields($hiddenFields)
+    {
+        $this->hiddenFields = $hiddenFields;
     }
 
     public function isSubmitted()
@@ -73,6 +107,9 @@ class ExposeForm {
 
     public function getErrors($deep = false, $flatten = true)
     {
+        foreach ($this->fields as $field) {
+            $field->validate();
+        }
         return $this->errors;
     }
 

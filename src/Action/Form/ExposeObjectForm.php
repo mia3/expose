@@ -4,6 +4,7 @@ namespace Mia3\Expose\Action\Form;
 use Mia3\Expose\Core\Expose;
 use Mia3\Expose\Reflection\ClassSchema;
 use Mia3\Expose\Reflection\ClassSchemaFactory;
+use Mia3\Expose\Validator\SymfonyValidator;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class ExposeObjectForm extends ExposeForm {
@@ -37,9 +38,16 @@ class ExposeObjectForm extends ExposeForm {
                 // handle not settable properties
                 continue;
             }
-            $formField = $this->createField($property->getName());
-            $formField->setControl($property->getControl());
-            $formField->setDefault($accessor->getValue($this->object, $property->getName()));
+            if ($property->isHidden()) {
+                $formField = $this->createHiddenField($property->getName());
+                $formField->setDefault($accessor->getValue($this->object, $property->getName()));
+            } else {
+                $formField = $this->createField($property->getName());
+                $formField->setControl($property->getControl());
+                $formField->setDefault($accessor->getValue($this->object, $property->getName()));
+                $formField->setRequired($property->getRequired());
+                $formField->setValidator(new SymfonyValidator($property->getAnnotations()));
+            }
         }
     }
 

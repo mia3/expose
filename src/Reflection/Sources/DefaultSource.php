@@ -42,6 +42,8 @@ class DefaultSource extends AbstractSchemaSource {
 				'parentClassName' => $this->className,
 				'position' => ( $key + 1 ) * 100,
 				'infotext' => '',
+                'hidden' => false,
+                'required' => false,
 				'optionsProvider' => array(
 					'Name' => 'Relation'
 				)

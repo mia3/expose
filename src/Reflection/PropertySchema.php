@@ -102,9 +102,25 @@ class PropertySchema {
 		return $this->schema['elementType'];
 	}
 
-	public function getControl() {
-		return $this->schema['control'];
-	}
+    public function getControl() {
+        return $this->schema['control'];
+    }
+
+    public function isHidden() {
+        return $this->schema['hidden'];
+    }
+
+    public function getHidden() {
+        return $this->schema['hidden'];
+    }
+
+    public function getRequired() {
+        return $this->schema['required'];
+    }
+
+    public function getAnnotations() {
+        return $this->schema['annotations'];
+    }
 
 	public function getHandler() {
 		if (isset($this->schema['handler'])) {
