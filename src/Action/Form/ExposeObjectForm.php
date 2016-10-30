@@ -1,9 +1,10 @@
 <?php
-namespace Mia3\Expose\Form;
+namespace Mia3\Expose\Action\Form;
 
 use Mia3\Expose\Core\Expose;
 use Mia3\Expose\Reflection\ClassSchema;
 use Mia3\Expose\Reflection\ClassSchemaFactory;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class ExposeObjectForm extends ExposeForm {
 
@@ -24,12 +25,21 @@ class ExposeObjectForm extends ExposeForm {
 
     public function setClassName($className) {
         $this->className = $className;
-        $this->object = new $className();
+        if ($this->object === NULL) {
+            $this->object = new $className();
+        }
         $this->classSchema = Expose::classSchemaFactory()->createClassSchema($className);
 
+        $accessor = PropertyAccess::createPropertyAccessor();
         foreach ($this->classSchema->getProperties() as $property) {
+            if (!$accessor->isReadable($this->object, $property->getName())) {
+                // todo, what happened here?
+                // handle not settable properties
+                continue;
+            }
             $formField = $this->createField($property->getName());
             $formField->setControl($property->getControl());
+            $formField->setDefault($accessor->getValue($this->object, $property->getName()));
         }
     }
 
@@ -38,8 +48,14 @@ class ExposeObjectForm extends ExposeForm {
      */
     public function getObject()
     {
+        $accessor = PropertyAccess::createPropertyAccessor();
         foreach ($this->fields as $field) {
-            var_dump($field->getName(), $field->getValue());
+            if (!$accessor->isWritable($this->object, $field->getName())) {
+                // todo, what happened here?
+                // handle not settable properties
+                continue;
+            }
+            $accessor->setValue($this->object, $field->getName(), $field->getValue());
         }
         return $this->object;
     }
@@ -50,6 +66,7 @@ class ExposeObjectForm extends ExposeForm {
     public function setObject($object)
     {
         $this->object = $object;
+        $this->setClassName(get_class($object));
     }
 
     /**

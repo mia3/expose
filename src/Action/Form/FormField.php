@@ -1,5 +1,5 @@
 <?php
-namespace Mia3\Expose\Form;
+namespace Mia3\Expose\Action\Form;
 
 use Mia3\Expose\Utility\StringFormatter;
 
@@ -160,12 +160,22 @@ class FormField {
         return $this;
     }
 
-
     /**
      * @return mixed
      */
     public function getValue()
     {
+        return $this->value;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getValueOrDefault()
+    {
+        if ($this->value == NULL) {
+            return $this->getDefault();
+        }
         return $this->value;
     }
 

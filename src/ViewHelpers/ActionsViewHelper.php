@@ -12,8 +12,7 @@ namespace Mia3\Expose\ViewHelpers;
  *                                                                        */
 
 use Doctrine\ORM\Mapping as ORM;
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * This viewhelper looks for actions annotated with the ``\Mia3\Expose\Annotations\Action`` annotation and filter them
@@ -33,7 +32,7 @@ use TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper;
  *   </e:actions>
  *
  */
-class ActionsViewHelper extends AbstractViewHelper {
+class ActionsViewHelper extends AbstractViewHelper  {
 
 	
 	/**
@@ -49,37 +48,42 @@ class ActionsViewHelper extends AbstractViewHelper {
 	 */
 	protected $reflectionService;
 
+    /**
+     * Constructor
+     */
+    public function initializeArguments() {
+        $this->registerArgument('type', 'string', 'Type of actions to return [local|global|batch]');
+        $this->registerArgument('as', 'string', 'Variable to assign the actions into the view with', FALSE, 'actions');
+    }
+
 	/**
 	 *
-	 * @param string $type Type of actions to return [local|global|batch]
-	 * @param string $actions Variable to assign the actions into the view with
 	 * @return string Rendered string
 	 * @api
 	 */
-	public function render($type, $as = 'actions') {
-		$controllerObjectName = $this->controllerContext->getRequest()->getControllerObjectName();
+	public function render() {
+//		$controllerObjectName = $this->controllerContext->getRequest()->getControllerObjectName();
 
 		$actions = array();
-		foreach (get_class_methods($controllerObjectName) as $objectMethod) {
-			if (substr($objectMethod, -6) === 'Action') {
-				$annotations = $this->reflectionService->getMethodAnnotations('\\' . $controllerObjectName, $objectMethod, '\Mia3\Expose\Annotations\Action');
-				if (empty($annotations)) {
-					continue;
-				}
-				$annotation = current($annotations);
-				if ($annotation->type === $type) {
-					$annotation->action = substr($objectMethod, 0, -6);
-					$actions[$annotation->action] = $annotation;
-				}
-			}
-		}
+        // todo replace with some other logic
+//		foreach (get_class_methods($controllerObjectName) as $objectMethod) {
+//			if (substr($objectMethod, -6) === 'Action') {
+//				$annotations = $this->reflectionService->getMethodAnnotations('\\' . $controllerObjectName, $objectMethod, '\Mia3\Expose\Annotations\Action');
+//				if (empty($annotations)) {
+//					continue;
+//				}
+//				$annotation = current($annotations);
+//				if ($annotation->type === $type) {
+//					$annotation->action = substr($objectMethod, 0, -6);
+//					$actions[$annotation->action] = $annotation;
+//				}
+//			}
+//		}
 
-		$this->templateVariableContainer->add($as, $actions);
+		$this->templateVariableContainer->add($this->arguments['as'], $actions);
 		$content = $this->renderChildren();
-		$this->templateVariableContainer->remove($as);
+		$this->templateVariableContainer->remove($this->arguments['as']);
 
 		return $content;
 	}
 }
-
-?>

@@ -1,5 +1,5 @@
 <?php
-namespace Flowpack\Expose\ViewHelpers;
+namespace Mia3\Expose\ViewHelpers;
 
 /*                                                                        *
  * This script belongs to the TYPO3 Flow package "Flowpack.Expose".       *
@@ -11,13 +11,11 @@ namespace Flowpack\Expose\ViewHelpers;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use Doctrine\ORM\Mapping as ORM;
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  */
-class BlockViewHelper extends AbstractViewHelper {
+class BlockViewHelper extends AbstractViewHelper  {
 	
 	/**
 	 * NOTE: This property has been introduced via code migration to ensure backwards-compatibility.
@@ -25,19 +23,22 @@ class BlockViewHelper extends AbstractViewHelper {
 	 * @var boolean
 	 */
 	protected $escapeOutput = FALSE;
+
+    public function initializeArguments()
+    {
+        parent::initializeArguments();
+        $this->registerArgument('name', 'string', 'name of the block');
+    }
+
 	/**
 	 *
-	 * @param string $name
 	 * @return string Rendered string
-	 * @api
 	 */
-	public function render($name) {
-		if ($this->viewHelperVariableContainer->exists('Flowpack\Expose\ViewHelpers\BlockViewHelper', $name)) {
-			$block = $this->viewHelperVariableContainer->get('Flowpack\Expose\ViewHelpers\BlockViewHelper', $name);
+	public function render() {
+		if ($this->viewHelperVariableContainer->exists('Mia3\Expose\ViewHelpers\BlockViewHelper', $this->arguments['name'])) {
+			$block = $this->viewHelperVariableContainer->get('Mia3\Expose\ViewHelpers\BlockViewHelper', $this->arguments['name']);
 			return implode(chr(10), $block);
 		}
 
 	}
 }
-
-?>

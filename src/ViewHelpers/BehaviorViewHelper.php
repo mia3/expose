@@ -1,5 +1,5 @@
 <?php
-namespace Flowpack\Expose\ViewHelpers;
+namespace Mia3\Expose\ViewHelpers;
 
 /*                                                                        *
  * This script belongs to the TYPO3 Flow package "Flowpack.Expose".       *
@@ -13,9 +13,7 @@ namespace Flowpack\Expose\ViewHelpers;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\PersistentCollection;
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Flow\Persistence\PersistenceManagerInterface;
-use TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  */
@@ -29,40 +27,42 @@ class BehaviorViewHelper extends AbstractViewHelper {
 	 */
 	protected $escapeOutput = FALSE;
 
-	/**
-	 * @Flow\Inject
-	 * @var PersistenceManagerInterface
-	 */
-	protected $persistenceManager;
+    /**
+     * Constructor
+     */
+    public function initializeArguments() {
+        $this->registerArgument('items', 'mixed', 'iteratable or array of objects');
+        $this->registerArgument('behaviors', 'array', 'array of behaviors to apply', FALSE, array());
+    }
 
-	/**
+    /**
 	 *
-	 * @param objects $objects
-	 * @param array $behaviors
 	 * @return string Rendered string
-	 * @api
 	 */
-	public function render($objects, $behaviors = array()) {
-		$query = $this->getQuery($objects);
+	public function render() {
+	    $items = $this->arguments['items'];
 
-		foreach ($behaviors as $behaviorClassName => $active) {
-			if ($active !== TRUE) {
-				continue;
-			}
-			$behavior = new $behaviorClassName();
-			$behavior->setRequest($this->controllerContext->getRequest());
-			$behavior->setTemplateVariableContainer($this->templateVariableContainer);
-			$behavior->setViewHelperVariableContainer($this->viewHelperVariableContainer);
-			$behavior->run($query);
-		}
+        // todo replace logic!
+//		$query = $this->getQuery($items);
+//
+//		foreach ($this->arguments['behaviors'] as $behaviorClassName => $active) {
+//			if ($active !== TRUE) {
+//				continue;
+//			}
+//			$behavior = new $behaviorClassName();
+//			$behavior->setRequest($this->controllerContext->getRequest());
+//			$behavior->setTemplateVariableContainer($this->templateVariableContainer);
+//			$behavior->setViewHelperVariableContainer($this->viewHelperVariableContainer);
+//			$behavior->run($query);
+//		}
 
-		$as = array_search($objects, $this->templateVariableContainer->getAll());
+//		$as = array_search($objects, $this->templateVariableContainer->getAll());
 
-		$this->templateVariableContainer->remove($as);
-		$this->templateVariableContainer->add($as, $query->execute());
+//		$this->templateVariableContainer->remove($as);
+//		$this->templateVariableContainer->add($as, $query->execute());
 		$content = $this->renderChildren();
-		$this->templateVariableContainer->remove($as);
-		$this->templateVariableContainer->add($as, $objects);
+//		$this->templateVariableContainer->remove($as);
+//		$this->templateVariableContainer->add($as, $objects);
 
 		return $content;
 	}

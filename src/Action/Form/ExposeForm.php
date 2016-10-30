@@ -1,8 +1,8 @@
 <?php
-namespace Mia3\Expose\Form;
+namespace Mia3\Expose\Action\Form;
 
 use Mia3\Expose\Reflection\ClassSchemaFactory;
-use Mia3\Expose\Form\FormRequestInterface;
+use Mia3\Expose\Request\RequestInterface;
 
 class ExposeForm {
 
@@ -21,7 +21,7 @@ class ExposeForm {
     protected $errors = array();
 
     /**
-     * @var FormRequestInterface
+     * @var RequestInterface
      */
     protected $formRequest;
 

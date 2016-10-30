@@ -1,9 +1,9 @@
 <?php
-namespace Mia3\Expose\Form;
+namespace Mia3\Expose\Request;
 
 use Symfony\Component\HttpFoundation\Request;
 
-class SymfonyFormRequest implements FormRequestInterface {
+class SymfonyRequest implements RequestInterface {
 
     /**
      * @var Request

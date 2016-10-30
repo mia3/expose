@@ -1,7 +1,7 @@
 <?php
 namespace Mia3\Expose\ViewHelpers\Form;
 
-use Mia3\Expose\Form\FormField;
+use Mia3\Expose\Action\Form\FormField;
 use Mia3\Expose\Reflection\ClassSchema;
 use Mia3\Expose\Reflection\PropertySchema;
 use Mia3\Expose\ViewHelpers\FormViewHelper;

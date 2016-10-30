@@ -7,6 +7,10 @@
             "email": "marc@mia3.com"
         }
     ],
+    "require": {
+        "symfony/property-access": "*",
+        "symfony/property-access": "*"
+    },
     "autoload": {
         "psr-4": {
             "Mia3\\Expose\\": "src/"

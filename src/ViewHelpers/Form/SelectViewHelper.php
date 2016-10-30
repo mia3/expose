@@ -10,13 +10,13 @@ class SelectViewHelper extends AbstractTagBasedViewHelper
     
     protected $tagName = "select";
 
-
     public function initializeArguments()
     {
         parent::initializeArguments();
 
         $this->registerTagAttribute('size', 'string', 'Size of input field');
         $this->registerTagAttribute('name', 'string', 'Name of input field');
+        $this->registerTagAttribute('class', 'string', 'class of input field');
         $this->registerTagAttribute('disabled', 'string', 'Specifies that the input element should be disabled when the page loads');
         $this->registerArgument('optionValueField', 'string', 'If specified, will call the appropriate getter on each object to determine the value.');
         $this->registerArgument('optionLabelField', 'string', 'If specified, will call the appropriate getter on each object to determine the label.');

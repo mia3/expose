@@ -33,6 +33,7 @@ class PhpSource extends AbstractSchemaSource {
 				continue;
 			}
 			$propertySchema = $this->getPropertyTypes($propertyName);
+            $propertySchema['name'] = $propertyName;
 			$propertySchema['control'] = $this->resolveControl($propertySchema);
 			$propertySchema['isCollection'] = $this->isCollection($propertySchema);
 			$schema['properties'][$propertyName] = $propertySchema;
@@ -61,6 +62,10 @@ class PhpSource extends AbstractSchemaSource {
 	}
 
 	public function resolveControl($property) {
+	    if ($property['name'] == 'id') {
+	        return 'Hidden';
+        }
+
 		// todo
 //		if (class_exists($property['type'])) {
 //			if ($this->reflectionService->isClassAnnotatedWith($property['type'], '\TYPO3\Flow\Annotations\Entity')) {

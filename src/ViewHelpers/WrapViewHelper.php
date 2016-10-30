@@ -1,30 +1,18 @@
 <?php
-namespace Flowpack\Expose\ViewHelpers;
+namespace Mia3\Expose\ViewHelpers;
 
-/*                                                                        *
- * This script belongs to the TYPO3 Flow package "Flowpack.Expose".       *
- *                                                                        *
- * It is free software; you can redistribute it and/or modify it under    *
- * the terms of the GNU Lesser General Public License, either version 3   *
- * of the License, or (at your option) any later version.                 *
- *                                                                        *
- * The TYPO3 project - inspiring people to share!                         *
- *                                                                        */
-
-use Doctrine\ORM\Mapping as ORM;
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  */
-class WrapViewHelper extends AbstractViewHelper {
-	
-	/**
-	 * NOTE: This property has been introduced via code migration to ensure backwards-compatibility.
-	 * @see AbstractViewHelper::isOutputEscapingEnabled()
-	 * @var boolean
-	 */
-	protected $escapeOutput = FALSE;
+class WrapViewHelper extends AbstractViewHelper  {
+    /**
+     * NOTE: This property has been introduced via code migration to ensure backwards-compatibility.
+     * @see AbstractViewHelper::isOutputEscapingEnabled()
+     * @var boolean
+     */
+    protected $escapeOutput = FALSE;
+
 	/**
 	 * Constructor
 	 *
@@ -32,22 +20,19 @@ class WrapViewHelper extends AbstractViewHelper {
 	 */
 	public function __construct() {
 		$this->registerArgument('name', 'string', 'Name of the Wrapper', TRUE);
-		$this->registerArgument('arguments', 'array', 'Arguments supplied to the callback applying this wrapper', FALSE);
+		$this->registerArgument('arguments', 'array', 'Arguments supplied to the callback applying this wrapper', FALSE, array());
 	}
 
 	/**
 	 *
-	 * @param string $name Name of the Wrapper
-	 * @param array $arguments Arguments supplied to the callback applying this wrapper
 	 * @return string Rendered string
-	 * @api
 	 */
-	public function render($name, $arguments = array()) {
+	public function render() {
 		$content = $this->renderChildren();
-		if ($this->viewHelperVariableContainer->exists('Flowpack\Expose\ViewHelpers\WrapViewHelper', $name)) {
-			$wraps = $this->viewHelperVariableContainer->get('Flowpack\Expose\ViewHelpers\WrapViewHelper', $name);
+		if ($this->viewHelperVariableContainer->exists('Flowpack\Expose\ViewHelpers\WrapViewHelper', $this->arguments['name'])) {
+			$wraps = $this->viewHelperVariableContainer->get('Flowpack\Expose\ViewHelpers\WrapViewHelper', $this->arguments['name']);
 			foreach ($wraps as $wrap) {
-				$content = $wrap->wrap($content, $arguments);
+				$content = $wrap->wrap($content, $this->arguments['arguments']);
 			}
 		}
 		return $content;
