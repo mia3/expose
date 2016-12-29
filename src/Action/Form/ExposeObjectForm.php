@@ -46,7 +46,7 @@ class ExposeObjectForm extends ExposeForm {
                 $formField->setControl($property->getControl());
                 $formField->setDefault($accessor->getValue($this->object, $property->getName()));
                 $formField->setRequired($property->getRequired());
-                $formField->setValidator(new SymfonyValidator($property->getAnnotations()));
+                $formField->setValidator(Expose::createPropertyValidator($property));
             }
         }
     }

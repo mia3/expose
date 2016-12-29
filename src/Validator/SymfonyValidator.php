@@ -2,18 +2,23 @@
 namespace Mia3\Expose\Validator;
 
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\Validator\Validator\RecursiveValidator;
 
 class SymfonyValidator implements FormFieldValidatorInterface  {
-    use ContainerAwareTrait;
 
     /**
      * @var array
      */
     protected $validators = array();
 
-    public function __construct($validators)
+    /**
+     * @var RecursiveValidator
+     */
+    protected $validator;
+
+    public function __construct(RecursiveValidator $validator, $property)
     {
-        $this->validators = $validators;
+//        $this->validators = $validators;
     }
 
     public function validate($value)
