@@ -32,39 +32,42 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
  *   </e:actions>
  *
  */
-class ActionsViewHelper extends AbstractViewHelper  {
+class ActionsViewHelper extends AbstractViewHelper
+{
 
-	
-	/**
-	 * NOTE: This property has been introduced via code migration to ensure backwards-compatibility.
-	 * @see AbstractViewHelper::isOutputEscapingEnabled()
-	 * @var boolean
-	 */
-	protected $escapeOutput = FALSE;
 
-	/**
-	 * @Flow\Inject
-	 * @var \TYPO3\Flow\Reflection\ReflectionService
-	 */
-	protected $reflectionService;
+    /**
+     * NOTE: This property has been introduced via code migration to ensure backwards-compatibility.
+     * @see AbstractViewHelper::isOutputEscapingEnabled()
+     * @var boolean
+     */
+    protected $escapeOutput = false;
+
+    /**
+     * @Flow\Inject
+     * @var \TYPO3\Flow\Reflection\ReflectionService
+     */
+    protected $reflectionService;
 
     /**
      * Constructor
      */
-    public function initializeArguments() {
+    public function initializeArguments()
+    {
         $this->registerArgument('type', 'string', 'Type of actions to return [local|global|batch]');
-        $this->registerArgument('as', 'string', 'Variable to assign the actions into the view with', FALSE, 'actions');
+        $this->registerArgument('as', 'string', 'Variable to assign the actions into the view with', false, 'actions');
     }
 
-	/**
-	 *
-	 * @return string Rendered string
-	 * @api
-	 */
-	public function render() {
+    /**
+     *
+     * @return string Rendered string
+     * @api
+     */
+    public function render()
+    {
 //		$controllerObjectName = $this->controllerContext->getRequest()->getControllerObjectName();
 
-		$actions = array();
+        $actions = array();
         // todo replace with some other logic
 //		foreach (get_class_methods($controllerObjectName) as $objectMethod) {
 //			if (substr($objectMethod, -6) === 'Action') {
@@ -80,10 +83,10 @@ class ActionsViewHelper extends AbstractViewHelper  {
 //			}
 //		}
 
-		$this->templateVariableContainer->add($this->arguments['as'], $actions);
-		$content = $this->renderChildren();
-		$this->templateVariableContainer->remove($this->arguments['as']);
+        $this->templateVariableContainer->add($this->arguments['as'], $actions);
+        $content = $this->renderChildren();
+        $this->templateVariableContainer->remove($this->arguments['as']);
 
-		return $content;
-	}
+        return $content;
+    }
 }

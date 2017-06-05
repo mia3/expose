@@ -18,7 +18,8 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\TagBuilder;
 
 /**
  */
-class FormViewHelper extends AbstractTagBasedViewHelper {
+class FormViewHelper extends AbstractTagBasedViewHelper
+{
 
     /**
      * @var string
@@ -28,14 +29,16 @@ class FormViewHelper extends AbstractTagBasedViewHelper {
     /**
      * Constructor
      */
-    public function initializeArguments() {
+    public function initializeArguments()
+    {
         $this->registerArgument('action', 'string', 'submission target');
         $this->registerArgument('form', 'object', 'Form Object');
-        $this->registerTagAttribute('method', 'string', 'form method', FALSE, 'post');
+        $this->registerTagAttribute('method', 'string', 'form method', false, 'post');
         $this->registerUniversalTagAttributes();
     }
 
-    public function render() {
+    public function render()
+    {
         $this->tag->addAttribute('action', $this->arguments['action']);
         $hiddenFields = array();
         /** @var FormField $hiddenField */
@@ -44,13 +47,14 @@ class FormViewHelper extends AbstractTagBasedViewHelper {
             $tag->addAttributes([
                 'type' => 'hidden',
                 'name' => $hiddenField->getName(),
-                'value' => $hiddenField->getValueOrDefault()
+                'value' => $hiddenField->getValueOrDefault(),
             ]);
             $hiddenFields[] = $tag->render();
         }
         $content = implode(chr(10), $hiddenFields) . chr(10) . $this->renderChildren();
         $this->tag->setContent($content);
         $output = $this->tag->render();
+
         return $output;
     }
 

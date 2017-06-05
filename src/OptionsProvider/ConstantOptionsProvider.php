@@ -29,46 +29,47 @@ use Mia3\Expose\Core\OptionsProvider\AbstractOptionsProvider;
  *                      Regex: TYPE_.+
  *
  */
-class ConstantOptionsProvider extends AbstractOptionsProvider {
-	/**
-	 * This contains the supported settings, their default values, descriptions and types.
-	 *
-	 * @var array
-	 */
-	protected $supportedSettings = array(
-		'Regex' => array(
-			'description' => 'Contains a Regular Expression to filter the class constants',
-			'required' => TRUE
-		),
-		'EmptyOption' => array(
-			'default' => NULL,
-			'description' => 'Set this setting to add an emtpy option to the beginning of the options',
-			'required' => FALSE
-		)
-	);
+class ConstantOptionsProvider extends AbstractOptionsProvider
+{
+    /**
+     * This contains the supported settings, their default values, descriptions and types.
+     *
+     * @var array
+     */
+    protected $supportedSettings = array(
+        'Regex' => array(
+            'description' => 'Contains a Regular Expression to filter the class constants',
+            'required' => true,
+        ),
+        'EmptyOption' => array(
+            'default' => null,
+            'description' => 'Set this setting to add an emtpy option to the beginning of the options',
+            'required' => false,
+        ),
+    );
 
-	/**
-	 * Load the Options by searching the Entities constants based on the specified regular
-	 * expression
-	 *
-	 * @return array $options
-	 */
-	public function getOptions() {
-		$className = $this->propertySchema->getClassName();
-		$reflection = new \ReflectionClass($className);
-		$regex = $this->settings['Regex'];
-		$constants = array();
-		if ($this->settings['EmptyOption'] !== NULL) {
-			$constants[] = $this->settings['EmptyOption'];
-		}
-		foreach ($reflection->getConstants() as $key => $value) {
-			if (preg_match(('/' . $regex) . '/', $key)) {
-				$constants[constant(($className . '::') . $key)] = $value;
-			}
-		}
-		return $constants;
-	}
+    /**
+     * Load the Options by searching the Entities constants based on the specified regular
+     * expression
+     *
+     * @return array $options
+     */
+    public function getOptions()
+    {
+        $className = $this->propertySchema->getClassName();
+        $reflection = new \ReflectionClass($className);
+        $regex = $this->settings['Regex'];
+        $constants = array();
+        if ($this->settings['EmptyOption'] !== null) {
+            $constants[] = $this->settings['EmptyOption'];
+        }
+        foreach ($reflection->getConstants() as $key => $value) {
+            if (preg_match(('/' . $regex) . '/', $key)) {
+                $constants[constant(($className . '::') . $key)] = $value;
+            }
+        }
+
+        return $constants;
+    }
 
 }
-
-?>

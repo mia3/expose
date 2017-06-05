@@ -15,50 +15,53 @@ use Mia3\Expose\Core\QueryBehaviors\AbstractQueryBehavior;
 
 /**
  */
-class SortBehavior extends AbstractQueryBehavior {
-	/**
-	 *
-	 * @param object $query
-	 * @return string Rendered string
-	 * @api
-	 */
-	public function run($query) {
-		$schema = $this->templateVariableContainer->get('schema');
-		$sortBy = $schema->getDefaultSortBy();
-		$order = $schema->getDefaultOrder() == 'DESC' ? 'DESC' : 'ASC';
+class SortBehavior extends AbstractQueryBehavior
+{
+    /**
+     *
+     * @param object $query
+     * @return string Rendered string
+     * @api
+     */
+    public function run($query)
+    {
+        $schema = $this->templateVariableContainer->get('schema');
+        $sortBy = $schema->getDefaultSortBy();
+        $order = $schema->getDefaultOrder() == 'DESC' ? 'DESC' : 'ASC';
 
-		if( $this->request->hasArgument("sortBy") ){
-			$sortBy = $this->request->getArgument("sortBy");
+        if ($this->request->hasArgument("sortBy")) {
+            $sortBy = $this->request->getArgument("sortBy");
 
-			if( $this->request->hasArgument("order") ){
-				$order = $this->request->getArgument("order");
-			} else {
-				$order = "DESC";
-			}
-		}
+            if ($this->request->hasArgument("order")) {
+                $order = $this->request->getArgument("order");
+            } else {
+                $order = "DESC";
+            }
+        }
 
-		if ($sortBy !== NULL) {
-			$query->setOrderings(array(
-				$sortBy => $order
-			));
-		}
+        if ($sortBy !== null) {
+            $query->setOrderings(array(
+                $sortBy => $order,
+            ));
+        }
 
-		$this->sorting = array(
-			"sortBy" => $sortBy,
-			"order"=> $order,
-			"oppositeOrder"=> $order == "ASC" ? "DESC" : "ASC"
-		);
+        $this->sorting = array(
+            "sortBy" => $sortBy,
+            "order" => $order,
+            "oppositeOrder" => $order == "ASC" ? "DESC" : "ASC",
+        );
 
-		$this->addWrapper('property', $this);
-	}
+        $this->addWrapper('property', $this);
+    }
 
-	public function wrap($content, $arguments) {
-		$arguments['content'] = $content;
-		$this->viewHelperVariableContainer->add('Mia3\Expose\ViewHelpers\Query\SortViewHelper', 'sorting', $this->sorting);
-		$content =  $this->viewHelperVariableContainer->getView()->renderPartial('SortField', NULL, $arguments);
-		$this->viewHelperVariableContainer->remove('Mia3\Expose\ViewHelpers\Query\SortViewHelper', 'sorting');
-		return $content;
-	}
+    public function wrap($content, $arguments)
+    {
+        $arguments['content'] = $content;
+        $this->viewHelperVariableContainer->add('Mia3\Expose\ViewHelpers\Query\SortViewHelper', 'sorting',
+            $this->sorting);
+        $content = $this->viewHelperVariableContainer->getView()->renderPartial('SortField', null, $arguments);
+        $this->viewHelperVariableContainer->remove('Mia3\Expose\ViewHelpers\Query\SortViewHelper', 'sorting');
+
+        return $content;
+    }
 }
-
-?>

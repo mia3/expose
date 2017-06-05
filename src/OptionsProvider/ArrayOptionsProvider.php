@@ -30,31 +30,31 @@ use Mia3\Expose\Core\OptionsProvider\AbstractOptionsProvider;
  *                      rejected: 'Rejected'
  *
  */
-class ArrayOptionsProvider extends AbstractOptionsProvider {
+class ArrayOptionsProvider extends AbstractOptionsProvider
+{
 
-	/**
-	 * This contains the supported settings, their default values, descriptions and types.
-	 *
-	 * @var array
-	 */
-	protected $supportedSettings = array(
-		'Options' => array(
-			'default' => array(),
-			'description' => 'Contains the options that will be provided',
-			'required' => TRUE
-		)
-	);
+    /**
+     * This contains the supported settings, their default values, descriptions and types.
+     *
+     * @var array
+     */
+    protected $supportedSettings = array(
+        'Options' => array(
+            'default' => array(),
+            'description' => 'Contains the options that will be provided',
+            'required' => true,
+        ),
+    );
 
-	/**
-	 * This functions returns the Options defined by a internal property
-	 * or Annotations
-	 *
-	 * @return array $options
-	 */
-	public function getOptions() {
-		return $this->settings['Options'];
-	}
+    /**
+     * This functions returns the Options defined by a internal property
+     * or Annotations
+     *
+     * @return array $options
+     */
+    public function getOptions()
+    {
+        return $this->settings['Options'];
+    }
 
 }
-
-?>

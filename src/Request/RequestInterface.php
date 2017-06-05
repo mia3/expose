@@ -1,7 +1,8 @@
 <?php
 namespace Mia3\Expose\Request;
 
-interface RequestInterface {
+interface RequestInterface
+{
 
     public function isSubmitted();
 

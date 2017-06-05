@@ -14,116 +14,124 @@ namespace Mia3\Expose\Reflection;
 /**
  * Render a Form section using the Form framework
  */
-class ClassSchema {
+class ClassSchema
+{
 
-	/**
-	 * @param ConfigurationManager
-	 */
-	protected $configurationManager;
+    /**
+     * @param ConfigurationManager
+     */
+    protected $configurationManager;
 
-	/**
-	 * @var ReflectionService
-	 */
-	protected $reflectionService;
+    /**
+     * @var ReflectionService
+     */
+    protected $reflectionService;
 
-	/**
-	 * the class name to build the form for
-	 *
-	 * @var string
-	 */
-	protected $className;
+    /**
+     * the class name to build the form for
+     *
+     * @var string
+     */
+    protected $className;
 
-	/**
-	 * @var array
-	 */
-	protected $schema;
+    /**
+     * @var array
+     */
+    protected $schema;
 
-	/**
-	 * @var array
-	 */
-	protected $properties;
+    /**
+     * @var array
+     */
+    protected $properties;
 
-	/**
-	 * @var string
-	 */
-	protected $propertyPrefix;
+    /**
+     * @var string
+     */
+    protected $propertyPrefix;
 
-	/**
-	 * @var object
-	 */
-	protected $object;
+    /**
+     * @var object
+     */
+    protected $object;
 
-	/**
-	 * @var ClassSchemaFactory
-	 */
-	protected $classSchemaFactory;
+    /**
+     * @var ClassSchemaFactory
+     */
+    protected $classSchemaFactory;
 
-	/**
-	 *
-	 * @param string $className
-	 * @param array $schemaData
-	 * @param ClassSchemaFactory $classSchemaFactory
-	 * @param string $propertyPrefix
-	 * @return void
-	 */
-	public function __construct($className, $schemaData, $classSchemaFactory, $propertyPrefix = NULL, $scope = NULL) {
-		$this->className = '\\' . ltrim($className, '\\');
-		$this->propertyPrefix = $propertyPrefix;
-		$this->classSchemaFactory = $classSchemaFactory;
-		$this->schema = $schemaData;
-		$this->properties = $this->schema['properties'];
-	}
+    /**
+     *
+     * @param string $className
+     * @param array $schemaData
+     * @param ClassSchemaFactory $classSchemaFactory
+     * @param string $propertyPrefix
+     * @return void
+     */
+    public function __construct($className, $schemaData, $classSchemaFactory, $propertyPrefix = null, $scope = null)
+    {
+        $this->className = '\\' . ltrim($className, '\\');
+        $this->propertyPrefix = $propertyPrefix;
+        $this->classSchemaFactory = $classSchemaFactory;
+        $this->schema = $schemaData;
+        $this->properties = $this->schema['properties'];
+    }
 
-	public function setObject($object) {
-		$this->object = $object;
-	}
+    public function setObject($object)
+    {
+        $this->object = $object;
+    }
 
-	public function getObject() {
-		return $this->object;
-	}
+    public function getObject()
+    {
+        return $this->object;
+    }
 
-	public function getPropertyNames() {
-		return array_keys($this->properties);
-	}
+    public function getPropertyNames()
+    {
+        return array_keys($this->properties);
+    }
 
-	public function getProperties($properyNames = NULL) {
-		if ($properyNames === NULL) {
-			$properyNames = $this->getPropertyNames();
-		}
+    public function getProperties($properyNames = null)
+    {
+        if ($properyNames === null) {
+            $properyNames = $this->getPropertyNames();
+        }
 
-		$properties = array();
-		foreach ($properyNames as $propertyName) {
-			if ($propertyName === '__toString') {
-				$property = new PropertySchema(array(
-					'name' => $propertyName,
-					'label' => ''
-				), $this, $this->propertyPrefix);
-			} else {
-				$property = $this->getProperty($propertyName);
-			}
-			$properties[$propertyName] = $property;
-		}
+        $properties = array();
+        foreach ($properyNames as $propertyName) {
+            if ($propertyName === '__toString') {
+                $property = new PropertySchema(array(
+                    'name' => $propertyName,
+                    'label' => '',
+                ), $this, $this->propertyPrefix);
+            } else {
+                $property = $this->getProperty($propertyName);
+            }
+            $properties[$propertyName] = $property;
+        }
 
-		return $properties;
-	}
+        return $properties;
+    }
 
-	public function getClassName() {
-		return $this->className;
-	}
+    public function getClassName()
+    {
+        return $this->className;
+    }
 
-	public function getProperty($propertyName) {
-		if (stristr($propertyName, '.')) {
-			$parts = explode('.', $propertyName);
-			$propertyPrefix = array_shift($parts);
-			$property = new PropertySchema($this->properties[$propertyPrefix], $this, $this->propertyPrefix);
+    public function getProperty($propertyName)
+    {
+        if (stristr($propertyName, '.')) {
+            $parts = explode('.', $propertyName);
+            $propertyPrefix = array_shift($parts);
+            $property = new PropertySchema($this->properties[$propertyPrefix], $this, $this->propertyPrefix);
 
-			if ($property->getElementType() !== NULL) {
-				$propertyClassName = $property->getElementType();
-				$propertyPrefix.= '.' . array_shift($parts);
+            if ($property->getElementType() !== null) {
+                $propertyClassName = $property->getElementType();
+                $propertyPrefix .= '.' . array_shift($parts);
 
-			} else {
-				$propertyClassName = $property->getType();
-			}
+            } else {
+                $propertyClassName = $property->getType();
+            }
 
 //			todo
 //			if (is_object($this->object)) {
@@ -133,55 +141,66 @@ class ClassSchema {
 //				}
 //			}
 
-			$propertyClassSchema = new ClassSchema($propertyClassName, $propertyPrefix);
+            $propertyClassSchema = new ClassSchema($propertyClassName, $propertyPrefix);
 
-			return $propertyClassSchema->getProperty(implode('.', $parts));
-		}
-		return new PropertySchema($this->properties[$propertyName], $this, $this->propertyPrefix);
-	}
+            return $propertyClassSchema->getProperty(implode('.', $parts));
+        }
 
-	public function getListPropertyNames() {
-		return $this->schema['listProperties'];
-	}
+        return new PropertySchema($this->properties[$propertyName], $this, $this->propertyPrefix);
+    }
 
-	public function getListProperties() {
-		return $this->getProperties($this->getListPropertyNames());
-	}
+    public function getListPropertyNames()
+    {
+        return $this->schema['listProperties'];
+    }
 
-	public function getSearchPropertyNames() {
-		return $this->schema['searchProperties'];
-	}
+    public function getListProperties()
+    {
+        return $this->getProperties($this->getListPropertyNames());
+    }
 
-	public function getSearchProperties() {
-		return $this->getProperties($this->getSearchPropertyNames());
-	}
+    public function getSearchPropertyNames()
+    {
+        return $this->schema['searchProperties'];
+    }
 
-	public function getFilterPropertNames() {
-		return $this->schema['filterProperties'];
-	}
+    public function getSearchProperties()
+    {
+        return $this->getProperties($this->getSearchPropertyNames());
+    }
 
-	public function getFilterProperties() {
-		return $this->getProperties($this->getFilterPropertNames());
-	}
+    public function getFilterPropertNames()
+    {
+        return $this->schema['filterProperties'];
+    }
 
-	public function getDefaultOrder() {
-		return $this->schema['defaultOrder'];
-	}
+    public function getFilterProperties()
+    {
+        return $this->getProperties($this->getFilterPropertNames());
+    }
 
-	public function getDefaultSortBy() {
-		return $this->schema['defaultSortBy'];
-	}
+    public function getDefaultOrder()
+    {
+        return $this->schema['defaultOrder'];
+    }
 
-	public function getListBehaviors() {
-		return $this->schema['listBehaviors'];
-	}
+    public function getDefaultSortBy()
+    {
+        return $this->schema['defaultSortBy'];
+    }
 
-	public function getFieldsets() {
-		return array(
-			array(
-				'name' => '',
-				'fields' => $this->getPropertyNames()
-			)
-		);
-	}
+    public function getListBehaviors()
+    {
+        return $this->schema['listBehaviors'];
+    }
+
+    public function getFieldsets()
+    {
+        return array(
+            array(
+                'name' => '',
+                'fields' => $this->getPropertyNames(),
+            ),
+        );
+    }
 }

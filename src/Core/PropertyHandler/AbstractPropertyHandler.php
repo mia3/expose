@@ -13,30 +13,31 @@ namespace Mia3\Expose\Core\PropertyHandler;
 
 /**
  */
-abstract class AbstractPropertyHandler implements PropertyHandlerInterface {
-	/**
-	 * @var object
-	 */
-	protected $originalObject;
+abstract class AbstractPropertyHandler implements PropertyHandlerInterface
+{
+    /**
+     * @var object
+     */
+    protected $originalObject;
 
-	/**
-	 * @var string
-	 */
-	protected $propertyName;
+    /**
+     * @var string
+     */
+    protected $propertyName;
 
-	/**
-	 * @var PropertyMapper
-	 */
-	protected $propertyMapper;
+    /**
+     * @var PropertyMapper
+     */
+    protected $propertyMapper;
 
-	public function __construct($originalObject, $propertyName) {
-		$this->originalObject = $originalObject;
-		$this->propertyName = $propertyName;
-	}
+    public function __construct($originalObject, $propertyName)
+    {
+        $this->originalObject = $originalObject;
+        $this->propertyName = $propertyName;
+    }
 
-	public function addError($error) {
-		$this->propertyMapper->getMessages()->forProperty($this->propertyName)->addError($error);
-	}
+    public function addError($error)
+    {
+        $this->propertyMapper->getMessages()->forProperty($this->propertyName)->addError($error);
+    }
 }
-
-?>

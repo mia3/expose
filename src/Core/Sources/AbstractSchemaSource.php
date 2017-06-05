@@ -15,39 +15,40 @@ use Mia3\Expose\Utility\Inflector;
 
 /**
  */
-abstract class AbstractSchemaSource implements SchemaSourceInterface {
-	/**
-	 * @var string
-	 */
-	protected $className;
+abstract class AbstractSchemaSource implements SchemaSourceInterface
+{
+    /**
+     * @var string
+     */
+    protected $className;
 
-	/**
-	 * @var ReflectionService
-	 */
-	protected $reflectionService;
+    /**
+     * @var ReflectionService
+     */
+    protected $reflectionService;
 
-	/**
-	 * @var Inflector
-	 */
-	protected $inflector;
+    /**
+     * @var Inflector
+     */
+    protected $inflector;
 
-	public function __construct($className) {
-		$this->className = $className;
-		$this->reflectionService = new ReflectionService();
-		$this->inflector = new Inflector();
-	}
+    public function __construct($className)
+    {
+        $this->className = $className;
+        $this->reflectionService = new ReflectionService();
+        $this->inflector = new Inflector();
+    }
 
-	public function propertyShouldBeIgnored($propertyName) {
-		// if ($this->reflectionService->isPropertyAnnotatedWith($this->className, $propertyName, 'TYPO3\Flow\Annotations\Transient')) {
-		// 	return TRUE;
-		// }
+    public function propertyShouldBeIgnored($propertyName)
+    {
+        // if ($this->reflectionService->isPropertyAnnotatedWith($this->className, $propertyName, 'TYPO3\Flow\Annotations\Transient')) {
+        // 	return TRUE;
+        // }
 
-		// if ($this->reflectionService->isPropertyAnnotatedWith($this->className, $propertyName, 'TYPO3\Flow\Annotations\Inject')) {
-		// 	return TRUE;
-		// }
+        // if ($this->reflectionService->isPropertyAnnotatedWith($this->className, $propertyName, 'TYPO3\Flow\Annotations\Inject')) {
+        // 	return TRUE;
+        // }
 
-		return FALSE;
-	}
+        return false;
+    }
 }
-
-?>

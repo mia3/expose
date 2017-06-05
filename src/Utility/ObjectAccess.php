@@ -48,6 +48,7 @@ class Accessor
     {
         if (is_array($subject)) {
             $subject[$propertyName] = $propertyValue;
+
             return true;
         }
 
@@ -75,6 +76,7 @@ class Accessor
         } else {
             return false;
         }
+
         return true;
     }
 

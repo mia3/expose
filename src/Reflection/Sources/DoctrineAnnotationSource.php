@@ -16,24 +16,28 @@ use TYPO3\Flow\Annotations as Flow;
 
 /**
  */
-class DoctrineAnnotationSource extends AbstractSchemaSource {
+class DoctrineAnnotationSource extends AbstractSchemaSource
+{
 
-	public function compileSchema() {
-		$schema = array('properties' => array());
-		$propertyNames = $this->reflectionService->getPropertyNames($this->className);
-		foreach ($propertyNames as $key => $propertyName) {
-			$propertySchema = array();
-			$annotationClassNames = $this->reflectionService->getPropertyAnnotationClassNames($this->className, $propertyName);
+    public function compileSchema()
+    {
+        $schema = array('properties' => array());
+        $propertyNames = $this->reflectionService->getPropertyNames($this->className);
+        foreach ($propertyNames as $key => $propertyName) {
+            $propertySchema = array();
+            $annotationClassNames = $this->reflectionService->getPropertyAnnotationClassNames($this->className,
+                $propertyName);
             if (in_array('Doctrine\ORM\Mapping\Id', $annotationClassNames)) {
                 $propertySchema['hidden'] = true;
             }
             if (in_array('Symfony\Component\Validator\Constraints\NotBlank', $annotationClassNames)) {
                 $propertySchema['required'] = true;
             }
-			$schema['properties'][$propertyName] = $propertySchema;
-		}
-		return $schema;
-	}
+            $schema['properties'][$propertyName] = $propertySchema;
+        }
+
+        return $schema;
+    }
 
 
 }

@@ -51,7 +51,8 @@ class DoctrineEntityIndex
         $this->request = $request;
     }
 
-    public function setClassName($className) {
+    public function setClassName($className)
+    {
         $this->className = $className;
         $this->classSchema = Expose::classSchemaFactory()->createClassSchema($className);
 //        $this->repository = $this->container->get('doctrine')->getManager()->getRepository($className);
@@ -65,7 +66,8 @@ class DoctrineEntityIndex
         $this->repository = $repository;
     }
 
-    public function getItems() {
+    public function getItems()
+    {
         $accessor = PropertyAccess::createPropertyAccessor();
         $objects = $this->repository->findAll();
         $items = [];
@@ -79,6 +81,7 @@ class DoctrineEntityIndex
             $item->setProperties($properties);
             $items[] = $item;
         }
+
         return $items;
     }
 
@@ -117,7 +120,8 @@ class DoctrineEntityIndex
     /**
      * @param string $globalAction
      */
-    public function addGlobalAction($globalAction) {
+    public function addGlobalAction($globalAction)
+    {
         $this->globalActions[] = $globalAction;
     }
 
@@ -137,7 +141,8 @@ class DoctrineEntityIndex
         $this->itemActions = $itemActions;
     }
 
-    public function addItemAction($itemAction) {
+    public function addItemAction($itemAction)
+    {
         $this->itemActions[] = $itemAction;
     }
 }

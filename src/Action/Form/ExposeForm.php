@@ -4,7 +4,8 @@ namespace Mia3\Expose\Action\Form;
 use Mia3\Expose\Reflection\ClassSchemaFactory;
 use Mia3\Expose\Request\RequestInterface;
 
-class ExposeForm {
+class ExposeForm
+{
 
     /**
      * The fields of this form.
@@ -37,7 +38,8 @@ class ExposeForm {
         $this->formRequest = $formRequest;
     }
 
-    public function createField($name) {
+    public function createField($name)
+    {
         $formField = new FormField($name);
         $this->fields[$name] = $formField;
 
@@ -48,7 +50,8 @@ class ExposeForm {
         return $formField;
     }
 
-    public function createHiddenField($name) {
+    public function createHiddenField($name)
+    {
         $formField = new FormField($name);
         $this->hiddenFields[$name] = $formField;
 
@@ -110,6 +113,7 @@ class ExposeForm {
         foreach ($this->fields as $field) {
             $field->validate();
         }
+
         return $this->errors;
     }
 

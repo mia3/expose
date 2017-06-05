@@ -13,12 +13,11 @@ namespace Mia3\Expose\Core\Sources;
 
 /**
  */
-interface SchemaSourceInterface {
-	/**
-	 * Compile the schema for a specific className
-	 * @return array $schema
-	 */
-	public function compileSchema();
+interface SchemaSourceInterface
+{
+    /**
+     * Compile the schema for a specific className
+     * @return array $schema
+     */
+    public function compileSchema();
 }
-
-?>

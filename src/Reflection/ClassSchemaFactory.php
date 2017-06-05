@@ -14,27 +14,31 @@ namespace Mia3\Expose\Reflection;
 /**
  * Render a Form section using the Form framework
  */
-class ClassSchemaFactory {
+class ClassSchemaFactory
+{
 
     protected $sourceClassNames = array();
 
     /**
      *
      */
-    public function __construct() {
+    public function __construct()
+    {
 
     }
 
-    public function addSource($sourceClassName) {
+    public function addSource($sourceClassName)
+    {
         $this->sourceClassNames[] = $sourceClassName;
     }
 
-    public function createClassSchema($className) {
+    public function createClassSchema($className)
+    {
         if (is_object($className)) {
             $className = get_class($className);
         }
         $schema = array(
-            'properties' => array()
+            'properties' => array(),
         );
 
         foreach ($this->sourceClassNames as $sourceClassNames) {

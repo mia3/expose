@@ -4,7 +4,8 @@ namespace Mia3\Expose\Action\Form;
 use Mia3\Expose\Utility\StringFormatter;
 use Mia3\Expose\Validator\FormFieldValidatorInterface;
 
-class FormField {
+class FormField
+{
 
     /**
      * @var string
@@ -56,7 +57,8 @@ class FormField {
      */
     protected $validator;
 
-    public function __construct($name, $options = NULL) {
+    public function __construct($name, $options = null)
+    {
         $this->name = $name;
         $this->id = 'form-field-' . StringFormatter::pathToFormId($name);
         $this->label = StringFormatter::camelCaseToSentence($name);
@@ -78,6 +80,7 @@ class FormField {
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -95,6 +98,7 @@ class FormField {
     public function setDefault($default)
     {
         $this->default = $default;
+
         return $this;
     }
 
@@ -112,6 +116,7 @@ class FormField {
     public function setControl($control)
     {
         $this->control = $control;
+
         return $this;
     }
 
@@ -129,6 +134,7 @@ class FormField {
     public function setLabel($label)
     {
         $this->label = $label;
+
         return $this;
     }
 
@@ -146,6 +152,7 @@ class FormField {
     public function setRequired($required)
     {
         $this->required = $required;
+
         return $this;
     }
 
@@ -163,6 +170,7 @@ class FormField {
     public function setId($id)
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -179,9 +187,10 @@ class FormField {
      */
     public function getValueOrDefault()
     {
-        if ($this->value == NULL) {
+        if ($this->value == null) {
             return $this->getDefault();
         }
+
         return $this->value;
     }
 
@@ -191,6 +200,7 @@ class FormField {
     public function setValue($value)
     {
         $this->value = $value;
+
         return $this;
     }
 
@@ -208,6 +218,7 @@ class FormField {
     public function setWrap($wrap)
     {
         $this->wrap = $wrap;
+
         return $this;
     }
 
@@ -225,6 +236,7 @@ class FormField {
     public function setDescription($description)
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -244,7 +256,8 @@ class FormField {
         $this->validator = $validator;
     }
 
-    public function validate() {
+    public function validate()
+    {
         $this->validator->validate($this->getValue());
     }
 

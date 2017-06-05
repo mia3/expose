@@ -15,108 +15,119 @@ use Mia3\Expose\Core\QueryBehaviors\AbstractQueryBehavior;
 
 /**
  */
-class PaginationBehavior extends AbstractQueryBehavior {
-	/**
-	 * @var ConfigurationManager
-	 * @Flow\Inject
-	 */
-	protected $configurationManager;
+class PaginationBehavior extends AbstractQueryBehavior
+{
+    /**
+     * @var ConfigurationManager
+     * @Flow\Inject
+     */
+    protected $configurationManager;
 
-	/**
-	 *
-	 * @param object $query
-	 * @return string Rendered string
-	 * @api
-	 */
-	public function run($query) {
-		$configurationPath = 'Mia3.Expose.Pagination';
-		$this->query = $query;
-		$this->settings = $this->configurationManager->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, $configurationPath);
+    /**
+     *
+     * @param object $query
+     * @return string Rendered string
+     * @api
+     */
+    public function run($query)
+    {
+        $configurationPath = 'Mia3.Expose.Pagination';
+        $this->query = $query;
+        $this->settings = $this->configurationManager->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_SETTINGS,
+            $configurationPath);
 
-		$this->total = $this->query->count();
-		$limits = $this->handleLimits();
-		$pagination = $this->handlePagination();
+        $this->total = $this->query->count();
+        $limits = $this->handleLimits();
+        $pagination = $this->handlePagination();
 
-		$content = $this->viewHelperVariableContainer->getView()->renderPartial('Pagination', NULL, array(
-			'pagination' => $pagination,
-			'limits' => $limits
-		));
-		$this->addToBlock('bottom', $content);
-	}
+        $content = $this->viewHelperVariableContainer->getView()->renderPartial('Pagination', null, array(
+            'pagination' => $pagination,
+            'limits' => $limits,
+        ));
+        $this->addToBlock('bottom', $content);
+    }
 
-	public function handleLimits(){
+    public function handleLimits()
+    {
 
-		$limits = array();
-		foreach ($this->settings["Limits"] as $limit) {
-			$limits[$limit] = false;
-		}
+        $limits = array();
+        foreach ($this->settings["Limits"] as $limit) {
+            $limits[$limit] = false;
+        }
 
-		if($this->request->hasArgument("limit"))
-			$this->limit = $this->request->getArgument("limit");
-		else
-			$this->limit = $this->settings["DefaultLimit"];
+        if ($this->request->hasArgument("limit")) {
+            $this->limit = $this->request->getArgument("limit");
+        } else {
+            $this->limit = $this->settings["DefaultLimit"];
+        }
 
-		$unset = false;
-		foreach ($limits as $key => $value) {
-			$limits[$key] = ($this->limit == $key);
+        $unset = false;
+        foreach ($limits as $key => $value) {
+            $limits[$key] = ($this->limit == $key);
 
-			if(!$unset && intval($key) >= intval($this->total)){
-				$unset = true;
-				continue;
-			}
-			if($unset)
-				unset($limits[$key]);
-		}
+            if (!$unset && intval($key) >= intval($this->total)) {
+                $unset = true;
+                continue;
+            }
+            if ($unset) {
+                unset($limits[$key]);
+            }
+        }
 
-		if(count($limits) == 1)
-			$limits = array();
+        if (count($limits) == 1) {
+            $limits = array();
+        }
 
-		$this->query->setLimit($this->limit);
+        $this->query->setLimit($this->limit);
 
-		return $limits;
-	}
+        return $limits;
+    }
 
-	public function handlePagination(){
-		$currentPage = 1;
+    public function handlePagination()
+    {
+        $currentPage = 1;
 
-		if( $this->request->hasArgument("page") )
-			$currentPage = $this->request->getArgument("page");
+        if ($this->request->hasArgument("page")) {
+            $currentPage = $this->request->getArgument("page");
+        }
 
-		$pages = array();
-		for($i=0; $i < ($this->total / $this->limit); $i++) {
-			$pages[] = $i + 1;
-		}
+        $pages = array();
+        for ($i = 0; $i < ($this->total / $this->limit); $i++) {
+            $pages[] = $i + 1;
+        }
 
-		if($currentPage > count($pages))
-			$currentPage = count($pages);
+        if ($currentPage > count($pages)) {
+            $currentPage = count($pages);
+        }
 
-		$offset = ($currentPage - 1) * $this->limit;
-		$offset = $offset < 0 ? 0 : $offset;
-		$this->query->setOffset($offset);
-		$pagination = array("offset" => $offset);
+        $offset = ($currentPage - 1) * $this->limit;
+        $offset = $offset < 0 ? 0 : $offset;
+        $this->query->setOffset($offset);
+        $pagination = array("offset" => $offset);
 
-		if(count($pages) > 1){
-			$pagination["currentPage"] = $currentPage;
+        if (count($pages) > 1) {
+            $pagination["currentPage"] = $currentPage;
 
-			if($currentPage < count($pages))
-				$pagination["nextPage"] = $currentPage + 1;
+            if ($currentPage < count($pages)) {
+                $pagination["nextPage"] = $currentPage + 1;
+            }
 
-			if($currentPage > 1)
-				$pagination["prevPage"] = $currentPage - 1;
+            if ($currentPage > 1) {
+                $pagination["prevPage"] = $currentPage - 1;
+            }
 
-			if(count($pages) > $this->settings["MaxPages"]){
-				$max = $this->settings["MaxPages"];
-				$start = $currentPage - ( ($max + ($max % 2) ) / 2);
-				$start = $start > 0 ? $start : 0;
-				$start = $start > 0 ? $start : 0;
-				$start = $start + $max > count($pages) ? count($pages) - $max : $start;
-				$pages = array_slice($pages, $start, $max);
-			}
+            if (count($pages) > $this->settings["MaxPages"]) {
+                $max = $this->settings["MaxPages"];
+                $start = $currentPage - (($max + ($max % 2)) / 2);
+                $start = $start > 0 ? $start : 0;
+                $start = $start > 0 ? $start : 0;
+                $start = $start + $max > count($pages) ? count($pages) - $max : $start;
+                $pages = array_slice($pages, $start, $max);
+            }
 
-			$pagination["pages"] = $pages;
-		}
-		return $pagination;
-	}
+            $pagination["pages"] = $pages;
+        }
+
+        return $pagination;
+    }
 }
-
-?>

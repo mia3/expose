@@ -17,30 +17,33 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  */
-class BehaviorViewHelper extends AbstractViewHelper {
+class BehaviorViewHelper extends AbstractViewHelper
+{
 
-	
-	/**
-	 * NOTE: This property has been introduced via code migration to ensure backwards-compatibility.
-	 * @see AbstractViewHelper::isOutputEscapingEnabled()
-	 * @var boolean
-	 */
-	protected $escapeOutput = FALSE;
+
+    /**
+     * NOTE: This property has been introduced via code migration to ensure backwards-compatibility.
+     * @see AbstractViewHelper::isOutputEscapingEnabled()
+     * @var boolean
+     */
+    protected $escapeOutput = false;
 
     /**
      * Constructor
      */
-    public function initializeArguments() {
+    public function initializeArguments()
+    {
         $this->registerArgument('items', 'mixed', 'iteratable or array of objects');
-        $this->registerArgument('behaviors', 'array', 'array of behaviors to apply', FALSE, array());
+        $this->registerArgument('behaviors', 'array', 'array of behaviors to apply', false, array());
     }
 
     /**
-	 *
-	 * @return string Rendered string
-	 */
-	public function render() {
-	    $items = $this->arguments['items'];
+     *
+     * @return string Rendered string
+     */
+    public function render()
+    {
+        $items = $this->arguments['items'];
 
         // todo replace logic!
 //		$query = $this->getQuery($items);
@@ -60,26 +63,28 @@ class BehaviorViewHelper extends AbstractViewHelper {
 
 //		$this->templateVariableContainer->remove($as);
 //		$this->templateVariableContainer->add($as, $query->execute());
-		$content = $this->renderChildren();
+        $content = $this->renderChildren();
 //		$this->templateVariableContainer->remove($as);
 //		$this->templateVariableContainer->add($as, $objects);
 
-		return $content;
-	}
+        return $content;
+    }
 
-	public function getQuery($objects) {
-		if ($objects instanceof PersistentCollection) {
-			$query = $this->persistenceManager->createQueryForType($objects->getTypeClass()->name);
-			$ids = array();
-			foreach ($objects as $object) {
-				$ids[] = $this->persistenceManager->getIdentifierByObject($object);
-			}
-			$query->matching($query->in('Persistence_Object_Identifier', $ids));
-			return $query;
-		}
+    public function getQuery($objects)
+    {
+        if ($objects instanceof PersistentCollection) {
+            $query = $this->persistenceManager->createQueryForType($objects->getTypeClass()->name);
+            $ids = array();
+            foreach ($objects as $object) {
+                $ids[] = $this->persistenceManager->getIdentifierByObject($object);
+            }
+            $query->matching($query->in('Persistence_Object_Identifier', $ids));
 
-		return $objects->getQuery();
-	}
+            return $query;
+        }
+
+        return $objects->getQuery();
+    }
 }
 
 ?>

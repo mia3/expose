@@ -15,14 +15,15 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  */
-class BlockViewHelper extends AbstractViewHelper  {
-	
-	/**
-	 * NOTE: This property has been introduced via code migration to ensure backwards-compatibility.
-	 * @see AbstractViewHelper::isOutputEscapingEnabled()
-	 * @var boolean
-	 */
-	protected $escapeOutput = FALSE;
+class BlockViewHelper extends AbstractViewHelper
+{
+
+    /**
+     * NOTE: This property has been introduced via code migration to ensure backwards-compatibility.
+     * @see AbstractViewHelper::isOutputEscapingEnabled()
+     * @var boolean
+     */
+    protected $escapeOutput = false;
 
     public function initializeArguments()
     {
@@ -30,15 +31,20 @@ class BlockViewHelper extends AbstractViewHelper  {
         $this->registerArgument('name', 'string', 'name of the block');
     }
 
-	/**
-	 *
-	 * @return string Rendered string
-	 */
-	public function render() {
-		if ($this->viewHelperVariableContainer->exists('Mia3\Expose\ViewHelpers\BlockViewHelper', $this->arguments['name'])) {
-			$block = $this->viewHelperVariableContainer->get('Mia3\Expose\ViewHelpers\BlockViewHelper', $this->arguments['name']);
-			return implode(chr(10), $block);
-		}
+    /**
+     *
+     * @return string Rendered string
+     */
+    public function render()
+    {
+        if ($this->viewHelperVariableContainer->exists('Mia3\Expose\ViewHelpers\BlockViewHelper',
+            $this->arguments['name'])
+        ) {
+            $block = $this->viewHelperVariableContainer->get('Mia3\Expose\ViewHelpers\BlockViewHelper',
+                $this->arguments['name']);
 
-	}
+            return implode(chr(10), $block);
+        }
+
+    }
 }

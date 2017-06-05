@@ -3,7 +3,8 @@ namespace Mia3\Expose\Request;
 
 use Symfony\Component\HttpFoundation\Request;
 
-class SymfonyRequest implements RequestInterface {
+class SymfonyRequest implements RequestInterface
+{
 
     /**
      * @var Request
@@ -15,11 +16,13 @@ class SymfonyRequest implements RequestInterface {
         $this->request = $request;
     }
 
-    public function isSubmitted() {
+    public function isSubmitted()
+    {
         return $this->request->getMethod() === 'POST';
     }
 
-    public function getFormData($name) {
+    public function getFormData($name)
+    {
         return $this->request->get($name);
     }
 }

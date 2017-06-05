@@ -13,14 +13,13 @@ namespace Mia3\Expose\Core\QueryBehaviors;
 
 /**
  */
-interface QueryBehaviorInterface {
-	/**
-	 *
-	 * @param object $query
-	 * @return void
-	 * @api
-	 */
-	public function run($query);
+interface QueryBehaviorInterface
+{
+    /**
+     *
+     * @param object $query
+     * @return void
+     * @api
+     */
+    public function run($query);
 }
-
-?>

@@ -46,6 +46,7 @@ class Item
         if (empty($this->properties)) {
             return array('' => $this->value);
         }
+
         return $this->properties;
     }
 

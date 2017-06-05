@@ -13,12 +13,11 @@ namespace Mia3\Expose\Core\PropertyHandler;
 
 /**
  */
-interface PropertyHandlerInterface {
-	/**
-	 * @param mixed $propertyValue
-	 * @return void
-	 */
-	public function onSubmit($propertyValue);
+interface PropertyHandlerInterface
+{
+    /**
+     * @param mixed $propertyValue
+     * @return void
+     */
+    public function onSubmit($propertyValue);
 }
-
-?>

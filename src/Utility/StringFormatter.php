@@ -13,26 +13,32 @@ namespace Mia3\Expose\Utility;
 
 /**
  */
-class StringFormatter {
+class StringFormatter
+{
 
-	public static function formNameToPath($formName) {
-		$parts = explode('[', $formName);
-		array_walk($parts, function(&$value, $key){
-			$value = trim($value, ']');
-		});
-		return implode('.', $parts);
-	}
+    public static function formNameToPath($formName)
+    {
+        $parts = explode('[', $formName);
+        array_walk($parts, function (&$value, $key) {
+            $value = trim($value, ']');
+        });
 
-	public static function pathToFormId($path) {
-		return str_replace('.', '-', $path);
-	}
+        return implode('.', $parts);
+    }
 
-	public static function pathToTranslationId($path) {
-		return preg_replace('/\.[0-9]*\./', '.', $path);
-	}
+    public static function pathToFormId($path)
+    {
+        return str_replace('.', '-', $path);
+    }
 
-	public static function pathToFormName($path) {
-        if (stristr($path, '.') === FALSE) {
+    public static function pathToTranslationId($path)
+    {
+        return preg_replace('/\.[0-9]*\./', '.', $path);
+    }
+
+    public static function pathToFormName($path)
+    {
+        if (stristr($path, '.') === false) {
             return $path;
         }
 
@@ -50,7 +56,8 @@ class StringFormatter {
      * @param string $word The word to pluralize
      * @return string The pluralized word
      */
-    public static function pluralizeWord($word) {
+    public static function pluralizeWord($word)
+    {
         return \Sho_Inflect::pluralize($word);
     }
 
@@ -62,12 +69,14 @@ class StringFormatter {
      * @param boolean $lowercase Return lowercase value
      * @return string The humanized value
      */
-    public static function camelCaseToSentence($camelCased, $lowercase = FALSE) {
+    public static function camelCaseToSentence($camelCased, $lowercase = false)
+    {
         $spacified = preg_replace('/([a-z0-9])([A-Z])/', '$1 $2', $camelCased);
         $result = strtolower($spacified);
         if (!$lowercase) {
             $result = ucfirst($result);
         }
+
         return $result;
     }
 }

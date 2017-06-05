@@ -16,20 +16,22 @@ use TYPO3\Flow\Annotations as Flow;
 
 /**
  */
-class AnnotationSource extends AbstractSchemaSource {
+class AnnotationSource extends AbstractSchemaSource
+{
 
-	public function compileSchema() {
-		$schema = array('properties' => array());
-		$propertyNames = $this->reflectionService->getPropertyNames($this->className);
-		foreach ($propertyNames as $key => $propertyName) {
-			$propertySchema = array();
-			$propertySchema['annotations'] = $this->reflectionService->getPropertyAnnotations($this->className, $propertyName);
-			$schema['properties'][$propertyName] = $propertySchema;
-		}
-		return $schema;
-	}
+    public function compileSchema()
+    {
+        $schema = array('properties' => array());
+        $propertyNames = $this->reflectionService->getPropertyNames($this->className);
+        foreach ($propertyNames as $key => $propertyName) {
+            $propertySchema = array();
+            $propertySchema['annotations'] = $this->reflectionService->getPropertyAnnotations($this->className,
+                $propertyName);
+            $schema['properties'][$propertyName] = $propertySchema;
+        }
+
+        return $schema;
+    }
 
 
 }
-
-?>

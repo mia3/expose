@@ -19,14 +19,15 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
  *
  * @api
  */
-class FieldViewHelper extends AbstractViewHelper {
+class FieldViewHelper extends AbstractViewHelper
+{
 
     /**
      * Disable escaping of tag based ViewHelpers so that the rendered tag is not htmlspecialchar'd
      *
      * @var boolean
      */
-    protected $escapeOutput = FALSE;
+    protected $escapeOutput = false;
 
     /**
      * @var array
@@ -36,22 +37,24 @@ class FieldViewHelper extends AbstractViewHelper {
     /**
      * Constructor
      */
-    public function initializeArguments() {
-        $this->registerArgument('field', FormField::class, 'FormField to render', FALSE);
-        $this->registerArgument('name', 'string', 'Name of the form field', FALSE);
-        $this->registerArgument('value', 'string', 'Default value', FALSE);
-        $this->registerArgument('control', 'string', 'Specifies the control to use to render this field', FALSE, NULL);
-        $this->registerArgument('wrap', 'string', 'Specifies the wrap used to render the field', FALSE, 'Default');
-        $this->registerArgument('required', 'boolean', 'Specifies, if this form field is required', FALSE, FALSE);
-        $this->registerArgument('arguments', 'array', 'additional arguments for the control', FALSE, array());
-        $this->registerArgument('data-error', 'string', 'custom data attribute for error messages', FALSE, NULL);
-        $this->registerArgument('label', 'string', 'custom label for the field', FALSE, NULL);
+    public function initializeArguments()
+    {
+        $this->registerArgument('field', FormField::class, 'FormField to render', false);
+        $this->registerArgument('name', 'string', 'Name of the form field', false);
+        $this->registerArgument('value', 'string', 'Default value', false);
+        $this->registerArgument('control', 'string', 'Specifies the control to use to render this field', false, null);
+        $this->registerArgument('wrap', 'string', 'Specifies the wrap used to render the field', false, 'Default');
+        $this->registerArgument('required', 'boolean', 'Specifies, if this form field is required', false, false);
+        $this->registerArgument('arguments', 'array', 'additional arguments for the control', false, array());
+        $this->registerArgument('data-error', 'string', 'custom data attribute for error messages', false, null);
+        $this->registerArgument('label', 'string', 'custom label for the field', false, null);
     }
 
     /**
      * @return string
      */
-    public function render() {
+    public function render()
+    {
         /** @var FormField $formField */
         $formField = $this->arguments['field'];
         if (!$formField instanceof FormField) {
@@ -64,16 +67,20 @@ class FieldViewHelper extends AbstractViewHelper {
             return $this->arguments['control'];
         }
 
-        return $this->viewHelperVariableContainer->getView()->renderPartial('Expose/Wraps/Default', NULL, $this->arguments);
+        return $this->viewHelperVariableContainer->getView()->renderPartial('Expose/Wraps/Default', null,
+            $this->arguments);
     }
 
-    public function renderControl($control) {
+    public function renderControl($control)
+    {
         $content = $this->renderChildren();
         if (!empty($content)) {
             return $content;
         }
         $arguments = array_merge($this->arguments, $this->additionalArguments);
-        return $this->viewHelperVariableContainer->getView()->renderPartial('Expose/Fields/' . ucfirst($control), NULL, $arguments);
+
+        return $this->viewHelperVariableContainer->getView()->renderPartial('Expose/Fields/' . ucfirst($control), null,
+            $arguments);
     }
 
     /**
@@ -82,7 +89,7 @@ class FieldViewHelper extends AbstractViewHelper {
      */
     public function handleAdditionalArguments(array $arguments)
     {
-        $this->arguments = array_merge($this->arguments,$arguments);
+        $this->arguments = array_merge($this->arguments, $arguments);
     }
 
     /**
@@ -92,6 +99,6 @@ class FieldViewHelper extends AbstractViewHelper {
      */
     public function validateAdditionalArguments(array $arguments)
     {
-        return TRUE;
+        return true;
     }
 }

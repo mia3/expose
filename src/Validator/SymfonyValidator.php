@@ -4,7 +4,8 @@ namespace Mia3\Expose\Validator;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\Validator\Validator\RecursiveValidator;
 
-class SymfonyValidator implements FormFieldValidatorInterface  {
+class SymfonyValidator implements FormFieldValidatorInterface
+{
 
     /**
      * @var array

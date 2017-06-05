@@ -13,15 +13,14 @@ namespace Mia3\Expose\Core\OptionsProvider;
 
 /**
  */
-interface OptionsProviderInterface {
+interface OptionsProviderInterface
+{
 
-	/**
-	 * Returns the options used by the Form Elements
-	 *
-	 * @return array
-	 */
-	public function getOptions();
+    /**
+     * Returns the options used by the Form Elements
+     *
+     * @return array
+     */
+    public function getOptions();
 
 }
-
-?>

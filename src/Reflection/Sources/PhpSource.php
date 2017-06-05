@@ -16,87 +16,94 @@ use TYPO3\Flow\Annotations as Flow;
 
 /**
  */
-class PhpSource extends AbstractSchemaSource {
+class PhpSource extends AbstractSchemaSource
+{
 
-	/**
-	 * @var array
-	 */
-	protected $controls = array(
-		'string' => 'Textfield',
-		'int' => 'Textfield'
-	);
+    /**
+     * @var array
+     */
+    protected $controls = array(
+        'string' => 'Textfield',
+        'int' => 'Textfield',
+    );
 
-	public function compileSchema() {
-		$schema = array('properties' => array());
-		foreach ($this->reflectionService->getPropertyNames($this->className) as $key => $propertyName) {
-			if ($this->propertyShouldBeIgnored($propertyName) === TRUE) {
-				continue;
-			}
-			$propertySchema = $this->getPropertyTypes($propertyName);
+    public function compileSchema()
+    {
+        $schema = array('properties' => array());
+        foreach ($this->reflectionService->getPropertyNames($this->className) as $key => $propertyName) {
+            if ($this->propertyShouldBeIgnored($propertyName) === true) {
+                continue;
+            }
+            $propertySchema = $this->getPropertyTypes($propertyName);
             $propertySchema['name'] = $propertyName;
-			$propertySchema['control'] = $this->resolveControl($propertySchema);
-			$propertySchema['isCollection'] = $this->isCollection($propertySchema);
-			$schema['properties'][$propertyName] = $propertySchema;
-		}
-		return $schema;
-	}
-
-	public function getPropertyTypes($propertyName) {
-		$tags = $this->reflectionService->getPropertyTags($this->className, $propertyName);
-		$vars = $tags['var'];
-
-		if (strpos($vars[0], '<') !== FALSE) {
-			preg_match('/([^<]+)<(.+)>/', $vars[0], $matches);
-			$types = array(
-				'type' => $matches[1],
-				'elementType' => $matches[2]
-			);
-		} else {
-			$types = array(
-				'type' => $vars[0],
-				'elementType' => NULL
-			);
-		}
-
-		return $types;
-	}
-
-	public function resolveControl($property) {
-	    if ($property['name'] == 'id') {
-	        return 'Hidden';
+            $propertySchema['control'] = $this->resolveControl($propertySchema);
+            $propertySchema['isCollection'] = $this->isCollection($propertySchema);
+            $schema['properties'][$propertyName] = $propertySchema;
         }
 
-		// todo
+        return $schema;
+    }
+
+    public function getPropertyTypes($propertyName)
+    {
+        $tags = $this->reflectionService->getPropertyTags($this->className, $propertyName);
+        $vars = $tags['var'];
+
+        if (strpos($vars[0], '<') !== false) {
+            preg_match('/([^<]+)<(.+)>/', $vars[0], $matches);
+            $types = array(
+                'type' => $matches[1],
+                'elementType' => $matches[2],
+            );
+        } else {
+            $types = array(
+                'type' => $vars[0],
+                'elementType' => null,
+            );
+        }
+
+        return $types;
+    }
+
+    public function resolveControl($property)
+    {
+        if ($property['name'] == 'id') {
+            return 'Hidden';
+        }
+
+        // todo
 //		if (class_exists($property['type'])) {
 //			if ($this->reflectionService->isClassAnnotatedWith($property['type'], '\TYPO3\Flow\Annotations\Entity')) {
 //				return 'SingleSelect';
 //			}
 //		}
 
-		// todo
-		if ((
-				$property['type'] === 'array' ||
-				$property['type'] === 'SplObjectStorage' ||
-				ltrim($property['type'], '\\') === 'Doctrine\Common\Collections\Collection' ||
-				ltrim($property['type'], '\\') === 'Doctrine\Common\Collections\ArrayCollection'
-			)) {
-			return 'MultiSelect';
-		}
+        // todo
+        if ((
+            $property['type'] === 'array' ||
+            $property['type'] === 'SplObjectStorage' ||
+            ltrim($property['type'], '\\') === 'Doctrine\Common\Collections\Collection' ||
+            ltrim($property['type'], '\\') === 'Doctrine\Common\Collections\ArrayCollection'
+        )
+        ) {
+            return 'MultiSelect';
+        }
 
-		if (isset($this->controls[$property['type']])) {
-			return $this->controls[$property['type']];
-		}
+        if (isset($this->controls[$property['type']])) {
+            return $this->controls[$property['type']];
+        }
 
-		return $property['type'];
-	}
+        return $property['type'];
+    }
 
-	public function isCollection($property) {
-		if (($property['type'] === 'array' || $property['type'] === 'SplObjectStorage' || $property['type'] === '\Doctrine\Common\Collections\Collection' || $property['type'] === '\Doctrine\Common\Collections\ArrayCollection')) {
-			return TRUE;
-		}
+    public function isCollection($property)
+    {
+        if (($property['type'] === 'array' || $property['type'] === 'SplObjectStorage' || $property['type'] === '\Doctrine\Common\Collections\Collection' || $property['type'] === '\Doctrine\Common\Collections\ArrayCollection')) {
+            return true;
+        }
 
-		return FALSE;
-	}
+        return false;
+    }
 }
 
 ?>

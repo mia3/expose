@@ -7,7 +7,8 @@ use Mia3\Expose\Reflection\ClassSchemaFactory;
 use Mia3\Expose\Validator\SymfonyValidator;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-class ExposeObjectForm extends ExposeForm {
+class ExposeObjectForm extends ExposeForm
+{
 
     /**
      * @var string
@@ -24,9 +25,10 @@ class ExposeObjectForm extends ExposeForm {
      */
     protected $classSchema;
 
-    public function setClassName($className) {
+    public function setClassName($className)
+    {
         $this->className = $className;
-        if ($this->object === NULL) {
+        if ($this->object === null) {
             $this->object = new $className();
         }
         $this->classSchema = Expose::classSchemaFactory()->createClassSchema($className);
@@ -65,6 +67,7 @@ class ExposeObjectForm extends ExposeForm {
             }
             $accessor->setValue($this->object, $field->getName(), $field->getValue());
         }
+
         return $this->object;
     }
 

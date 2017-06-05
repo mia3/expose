@@ -14,8 +14,8 @@ class RouteViewHelper extends AbstractTagBasedViewHelper
     {
         parent::initializeArguments();
         $this->registerTagAttribute('class', 'string', 'class of input field');
-        $this->registerArgument('route','string','route to be used');
-        $this->registerArgument('arguments','array','arguments used for the route replacements', FALSE, array());
+        $this->registerArgument('route', 'string', 'route to be used');
+        $this->registerArgument('arguments', 'array', 'arguments used for the route replacements', false, array());
     }
 
     /**
@@ -29,6 +29,7 @@ class RouteViewHelper extends AbstractTagBasedViewHelper
         }
         $this->tag->addAttribute('href', $route);
         $this->tag->setContent($this->renderChildren());
+
         return $this->tag->render();
 
     }
@@ -41,14 +42,15 @@ class RouteViewHelper extends AbstractTagBasedViewHelper
      * @param bool $selected
      * @return string
      */
-    private function renderOptionTag($value,$label = null ,$selected = false)
+    private function renderOptionTag($value, $label = null, $selected = false)
     {
         $option = new TagBuilder("option");
         $option->addAttribute('value', $value);
         $option->setContent(!is_null($label) ? $label : $value);
-        if($selected) {
-            $option->addAttribute('selected','selected');
+        if ($selected) {
+            $option->addAttribute('selected', 'selected');
         }
+
         return $option->render();
     }
 }

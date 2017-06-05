@@ -15,51 +15,51 @@ use Mia3\Expose\Core\QueryBehaviors\AbstractQueryBehavior;
 
 /**
  */
-class FilterBehavior extends AbstractQueryBehavior {
+class FilterBehavior extends AbstractQueryBehavior
+{
 
-	/**
-	 * @var ReflectionService
-	 */
-	protected $reflectionService;
+    /**
+     * @var ReflectionService
+     */
+    protected $reflectionService;
 
-	/**
-	 *
-	 * @param object $query
-	 * @return string Rendered string
-	 * @api
-	 */
-	public function run($query) {
-		$schema = $this->templateVariableContainer->get('schema');
-		$properties = $schema->getFilterProperties();
-		$className = $this->templateVariableContainer->get('className');
-		$classSchema = $this->reflectionService->getClassSchema($className);
+    /**
+     *
+     * @param object $query
+     * @return string Rendered string
+     * @api
+     */
+    public function run($query)
+    {
+        $schema = $this->templateVariableContainer->get('schema');
+        $properties = $schema->getFilterProperties();
+        $className = $this->templateVariableContainer->get('className');
+        $classSchema = $this->reflectionService->getClassSchema($className);
 
-		if (empty($properties)) {
-			return;
-		}
+        if (empty($properties)) {
+            return;
+        }
 
-		$filter = array();
-		if( $this->request->hasArgument("filter") ){
-			$filter = $this->request->getArgument("filter");
+        $filter = array();
+        if ($this->request->hasArgument("filter")) {
+            $filter = $this->request->getArgument("filter");
 
-			$constraints = array();
-			foreach ($filter as $property => $value) {
-				$constraints[] = $query->equals($property, $value);
-			}
-			$query->matching($query->logicalAnd(
-				$query->getConstraint(),
-				$query->logicalAnd($constraints)
-			));
-		}
+            $constraints = array();
+            foreach ($filter as $property => $value) {
+                $constraints[] = $query->equals($property, $value);
+            }
+            $query->matching($query->logicalAnd(
+                $query->getConstraint(),
+                $query->logicalAnd($constraints)
+            ));
+        }
 
-		$this->viewHelperVariableContainer->add('Flowpack\Expose\QueryBehaviors\FilterBehavior', 'filter', $filter);
-		$content = $this->viewHelperVariableContainer->getView()->renderPartial('Filter', NULL, array(
-			'filter' => $filter,
-			'properties' => $properties
-		));
-		$this->viewHelperVariableContainer->remove('Flowpack\Expose\QueryBehaviors\FilterBehavior', 'filter');
-		$this->addToBlock('sidebar', $content);
-	}
+        $this->viewHelperVariableContainer->add('Flowpack\Expose\QueryBehaviors\FilterBehavior', 'filter', $filter);
+        $content = $this->viewHelperVariableContainer->getView()->renderPartial('Filter', null, array(
+            'filter' => $filter,
+            'properties' => $properties,
+        ));
+        $this->viewHelperVariableContainer->remove('Flowpack\Expose\QueryBehaviors\FilterBehavior', 'filter');
+        $this->addToBlock('sidebar', $content);
+    }
 }
-
-?>

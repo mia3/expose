@@ -98,5 +98,3 @@ class RelationOptionsProvider extends AbstractOptionsProvider {
 		return $this->propertySchema->getType();
 	}
 }
-
-?>

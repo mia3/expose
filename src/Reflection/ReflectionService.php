@@ -15,48 +15,60 @@ use Doctrine\Common\Annotations\AnnotationReader;
 
 /**
  */
-class ReflectionService {
+class ReflectionService
+{
 
     /**
      * @var AnnotationReader
      */
     protected $annotationReader;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->annotationReader = new AnnotationReader();
     }
 
-    public function getPropertyNames($className) {
+    public function getPropertyNames($className)
+    {
         $propertyNames = array();
         $reflection = new \ReflectionClass($className);
         foreach ($reflection->getProperties() as $key => $property) {
             $propertyNames[] = $property->name;
         }
+
         return $propertyNames;
     }
 
-    public function getClassAnnotations($className) {
+    public function getClassAnnotations($className)
+    {
         $reflectionClass = new \ReflectionClass($className);
+
         return $this->annotationReader->getClassAnnotations($reflectionClass);
     }
 
-    public function getPropertyAnnotations($className, $propertyName = NULL) {
+    public function getPropertyAnnotations($className, $propertyName = null)
+    {
         $reflectionProperty = new \ReflectionProperty($className, $propertyName);
+
         return $this->annotationReader->getPropertyAnnotations($reflectionProperty);
     }
 
-    public function getPropertyAnnotationClassNames($className, $propertyName = NULL) {
+    public function getPropertyAnnotationClassNames($className, $propertyName = null)
+    {
         $reflectionProperty = new \ReflectionProperty($className, $propertyName);
         $annotations = $this->annotationReader->getPropertyAnnotations($reflectionProperty);
         $classNames = array();
         foreach ($annotations as $annotation) {
             $classNames[] = get_class(($annotation));
         }
+
         return array_unique($classNames);
     }
 
-    public function getPropertyTags($className, $propertyName) {
+    public function getPropertyTags($className, $propertyName)
+    {
         $reflectionProperty = new \ReflectionProperty($className, $propertyName);
+
         return $this->parseDocComment($reflectionProperty->getDocComment());
     }
 
@@ -82,6 +94,7 @@ class ReflectionService {
                 $this->parseTag(substr($line, strpos($line, '@')), $tags);
             }
         }
+
         return $tags;
     }
 
@@ -107,5 +120,5 @@ class ReflectionService {
             $tags[$tag] = array();
         }
     }
-    
+
 }

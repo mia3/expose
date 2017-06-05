@@ -26,7 +26,8 @@ use Symfony\Component\Validator\Validator\RecursiveValidator;
 
 /**
  */
-class Expose {
+class Expose
+{
 
     /**
      * @var Container
@@ -38,59 +39,68 @@ class Expose {
      */
     static protected $classSchemaFactory;
 
-    public static function classSchemaFactory() {
+    public static function classSchemaFactory()
+    {
         if (!self::$classSchemaFactory instanceof ClassSchemaFactory) {
             self::$classSchemaFactory = self::container()->get('ClassSchemaFactory');
         }
+
         return self::$classSchemaFactory;
     }
 
-    public static function createForm($request) {
+    public static function createForm($request)
+    {
         return self::container()->get('Index', array($request));
     }
 
-    public static function createIndex($request) {
+    public static function createIndex($request)
+    {
         return self::container()->get('Index', array($request));
     }
 
-    public static function createPropertyValidator($property) {
+    public static function createPropertyValidator($property)
+    {
         return self::container()->get('PropertyValidator', array($property));
     }
 
     /**
      * @return Container
      */
-    public static function container() {
+    public static function container()
+    {
         if (!self::$container instanceof Container) {
             $container = new Container();
             $container->delegate(
                 new \League\Container\ReflectionContainer()
             );
 
-            $container->add('ClassSchemaFactory', function() {
+            $container->add('ClassSchemaFactory', function () {
                 $classSchemaFactory = new \Mia3\Expose\Reflection\ClassSchemaFactory();
                 $classSchemaFactory->addSource(\Mia3\Expose\Reflection\Sources\DefaultSource::class);
                 $classSchemaFactory->addSource(\Mia3\Expose\Reflection\Sources\PhpSource::class);
                 $classSchemaFactory->addSource(\Mia3\Expose\Reflection\Sources\AnnotationSource::class);
                 $classSchemaFactory->addSource(\Mia3\Expose\Reflection\Sources\DoctrineAnnotationSource::class);
+
                 return $classSchemaFactory;
             });
 
-            $container->add('RequestWrapper', function($request) {
+            $container->add('RequestWrapper', function ($request) {
                 return new SymfonyRequest($request);
             });
 
-            $container->add('Index', function($request) use($container) {
+            $container->add('Index', function ($request) use ($container) {
                 $requestWrapper = $container->get('RequestWrapper', array($request));
+
                 return new DoctrineEntityIndex($requestWrapper);
             });
 
-            $container->add('Form', function($request) use($container) {
+            $container->add('Form', function ($request) use ($container) {
                 $requestWrapper = $container->get('RequestWrapper', array($request));
+
                 return new ExposeObjectForm($requestWrapper);
             });
 
-            $container->add('PropertyValidator', function($property) use($container) {
+            $container->add('PropertyValidator', function ($property) use ($container) {
                 var_dump($container->get('Validator'));
 //                $requestWrapper = $container->get('RequestWrapper', array($request));
                 $validator = new SymfonyValidator($property);
@@ -100,6 +110,7 @@ class Expose {
 
             self::$container = $container;
         }
+
         return self::$container;
     }
 }

@@ -15,42 +15,42 @@ use Mia3\Expose\Core\QueryBehaviors\AbstractQueryBehavior;
 
 /**
  */
-class SearchBehavior extends AbstractQueryBehavior {
-	/**
-	 *
-	 * @param object $query
-	 * @return string Rendered string
-	 * @api
-	 */
-	public function run($query) {
-		$schema = $this->templateVariableContainer->get('schema');
-		$properties = $schema->getSearchProperties();
+class SearchBehavior extends AbstractQueryBehavior
+{
+    /**
+     *
+     * @param object $query
+     * @return string Rendered string
+     * @api
+     */
+    public function run($query)
+    {
+        $schema = $this->templateVariableContainer->get('schema');
+        $properties = $schema->getSearchProperties();
 
-		if (empty($properties)) {
-			return;
-		}
+        if (empty($properties)) {
+            return;
+        }
 
-		$search = '';
-		if( $this->request->hasArgument("search") ){
-			$search = $this->request->getArgument("search");
+        $search = '';
+        if ($this->request->hasArgument("search")) {
+            $search = $this->request->getArgument("search");
 
-			if (!empty($search)) {
-				$constraints = array();
-				foreach ($properties as $property) {
-					$constraints[] = $query->like($property->getPath(), '%' . $search . '%', FALSE);
-				}
-				$query->matching($query->logicalAnd(
-					$query->getConstraint(),
-					$query->logicalOr($constraints)
-				));
-			}
-		}
+            if (!empty($search)) {
+                $constraints = array();
+                foreach ($properties as $property) {
+                    $constraints[] = $query->like($property->getPath(), '%' . $search . '%', false);
+                }
+                $query->matching($query->logicalAnd(
+                    $query->getConstraint(),
+                    $query->logicalOr($constraints)
+                ));
+            }
+        }
 
-		$content = $this->viewHelperVariableContainer->getView()->renderPartial('Search', NULL, array(
-			'search' => $search
-		));
-		$this->addToBlock('top', $content);
-	}
+        $content = $this->viewHelperVariableContainer->getView()->renderPartial('Search', null, array(
+            'search' => $search,
+        ));
+        $this->addToBlock('top', $content);
+    }
 }
-
-?>

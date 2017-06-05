@@ -1,7 +1,8 @@
 <?php
 namespace Mia3\Expose\Validator;
 
-interface FormFieldValidatorInterface {
+interface FormFieldValidatorInterface
+{
 
     public function validate($value);
 

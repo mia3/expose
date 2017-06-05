@@ -31,12 +31,13 @@ class EntityController extends Controller
     {
         $this->container = $container;
 
-        if ($this->entityType !== NULL) {
+        if ($this->entityType !== null) {
             $this->repository = $this->container->get('doctrine')->getManager()->getRepository($this->entityType);
         }
     }
 
-    public function saveAndRedirectOnPost($request, $entityCallback, $redirectTarget) {
+    public function saveAndRedirectOnPost($request, $entityCallback, $redirectTarget)
+    {
         if ($request->isMethod('POST')) {
             $entity = $entityCallback($request);
             try {
